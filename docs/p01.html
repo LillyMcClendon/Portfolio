@@ -9,11 +9,13 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="Lilly McClendon" />
 
+<meta name="date" content="2025-02-07" />
 
-<title>Portfolio 1</title>
+<title>Portfolio Piece 01</title>
 
-<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -141,11 +143,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -174,8 +180,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -183,16 +189,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -293,20 +292,75 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Portfolio 1</h1>
+<h1 class="title toc-ignore">Portfolio Piece 01</h1>
+<h3 class="subtitle">The purpose of Portfolio Piece 1 is to create plots
+of squirrel sightings in New York City and pizza locations in New York
+City. Using that data, use latitutde and longitude from both databases
+to see if there is a visual connection between squirrel sightings and
+pizza shop locations. Then the data will be transformed.</h3>
+<h4 class="author">Lilly McClendon</h4>
+<h4 class="date">2025-02-07</h4>
 
 </div>
 
 
-<blockquote>
-<p>The projects should be numbered consecutively (i.e., in the order in
-which you began them), and should include for each project a description
-of the goal, the product (computer program, hand graph, computer graph,
-etc.), the data, and some interpretation. Reports must be reproducible
-and of high quality in terms of writing, grammar, presentation, etc.</p>
-</blockquote>
-<pre class="r"><code>library(tidyverse) 
-library(datasauRus)</code></pre>
+<div id="data-credits" class="section level3">
+<h3>Data Credits</h3>
+<p><a href="https://www.thesquirrelcensus.com/">Data from NYC Squirrel
+Census</a>. Retrieved from <a
+href="https://github.com/rfordatascience/tidytuesday/tree/main/data/2019/2019-10-29">jonthegeek</a>
+originally shared by Sara Stoudt. <a
+href="https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-10-01/pizza_datafiniti.csv%22">Pizza
+Data</a></p>
+</div>
+<div id="load-squirrel-data-and-packages" class="section level3">
+<h3>Load squirrel data and packages</h3>
+<pre class="r"><code>library(tidyverse) </code></pre>
+<pre class="r"><code>nyc_squirrels &lt;- readr::read_csv(&quot;https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2019/2019-10-29/nyc_squirrels.csv&quot;)</code></pre>
+<pre><code>## Rows: 3023 Columns: 36
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (14): unique_squirrel_id, hectare, shift, age, primary_fur_color, highli...
+## dbl  (9): long, lat, date, hectare_squirrel_number, zip_codes, community_dis...
+## lgl (13): running, chasing, climbing, eating, foraging, kuks, quaas, moans, ...
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div id="squirrel-fur-color-visualization" class="section level3">
+<h3>Squirrel fur color visualization</h3>
+<pre class="r"><code>ggplot(data=nyc_squirrels, aes(x=primary_fur_color, fill = primary_fur_color)) + 
+  geom_bar(stat = &quot;count&quot;, width = 1) + 
+  scale_fill_manual(values = c(&quot;black&quot;, &quot;chocolate4&quot;,&quot;darkgrey&quot;)) + 
+  labs(title=&quot;NYC Squirrel Fur Color&quot;, 
+       xlab = &quot;Number of Observations&quot;, 
+       ylab = &quot;Fur Color&quot;)</code></pre>
+<p><img src="p01_files/figure-html/squirrel-color-1.png" width="672" /></p>
+<div
+id="this-visualization-utilizes-the-scale_fill_manual-function-in-order-to-customize-the-colors-of-the-bars-to-match-the-fur-color-they-represent."
+class="section level4">
+<h4>This visualization utilizes the scale_fill_manual function in order
+to customize the colors of the bars to match the fur color they
+represent.</h4>
+</div>
+</div>
+<div id="load-pizza-data" class="section level3">
+<h3>Load pizza data</h3>
+<pre class="r"><code>pizza_datafiniti &lt;- readr::read_csv(&quot;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-10-01/pizza_datafiniti.csv&quot;)</code></pre>
+<pre><code>## Rows: 10000 Columns: 10
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (6): name, address, city, country, province, categories
+## dbl (4): latitude, longitude, price_range_min, price_range_max
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>pizza_nyc &lt;- pizza_datafiniti %&gt;%
+  filter(city == &quot;New York&quot;)</code></pre>
+</div>
+<div id="combine-squirrel-and-pizza-data" class="section level3">
+<h3>Combine squirrel and pizza data</h3>
+</div>
 
 
 
