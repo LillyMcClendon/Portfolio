@@ -1,11 +1,11 @@
 ---
-title: "Portfolio Piece 01"
-subtitle: "The purpose of Portfolio Piece 1 is to create plots of squirrel sightings in New York City and pizza locations in New York City. Using that data, use latitutde and longitude from both databases to see if there is a visual connection between squirrel sightings and pizza shop locations. Then the data will be transformed."
 author: "Lilly McClendon"
 date: "2025-02-07"
+title: "Portfolio Piece 01"
 output: github_document
 ---
 
+#### The purpose of Portfolio Piece 1 is to create plots of squirrel sightings in New York City and pizza locations in New York City. Using that data, use latitutde and longitude from both databases to see if there is a visual connection between squirrel sightings and pizza shop locations. Then the data will be transformed.
 
 ### Data Credits 
 
