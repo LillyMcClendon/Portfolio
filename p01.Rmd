@@ -5,13 +5,10 @@ title: "Portfolio Piece 01"
 output: html_document
 ---
 
-#### The purpose of Portfolio Piece 1 is to create interactive maps using the mapview package. In fall of 2020, my friend sent me a picture of a squirrel eating a large piece of pizza up in a tree. 
-
 ![Squirrel Eating Pizza!](p01/W&M_Squirrel_Pizza.png)
 
 
-
-#### of New York City squirrel sightings in Central Park and New York City pizza restaurant locations.
+#### The purpose of Portfolio Piece 1 is to create interactive maps using the mapview package. In fall of 2020, my friend sent me a picture of a squirrel eating a large piece of pizza up in a tree. As many people consider New York City the place for pizza, I am interested to see how the location of squirrel sightings in Central Park and pizza restaurants. Further, I want to see if squirrels were spotted more frequently eating near pizza restaurants.  
 
 ### Data Credits 
 
@@ -90,9 +87,34 @@ ggplot(squirrels_and_pizza) +
 library(tidyverse)
 library(sf)
 library(mapview)
-mapview(squirrels_and_pizza, xcol = "long", ycol = "lat", crs = 4269, grid = FALSE, zcol = "source")
+mapview(squirrels_and_pizza, xcol = "long", ycol = "lat", crs = 4269, grid = FALSE, zcol = "source", legend = TRUE)
 ```
 
-### In Central Park, does this data support the idea that squirrels like pizza? 
+### Filter Data for only squirrels sighted eating
+
+```{r filter-data-squirrels-eating}
+library(dplyr)
+eating_squirrels <- nyc_squirrels %>% 
+  filter(eating == "TRUE")
+```
+
+### Combine data of squirrels sighted eating and pizza locations
+
+```{r combine-data}
+squirrels_eating_and_pizza <- bind_rows(eating_squirrels, pizza_nyc)
+print(squirrels_eating_and_pizza)
+```
 
 
+### Interactive map for squirrels sighted eating and pizza locations
+
+```{r squirrel-eating-pizza-map}
+library(tidyverse)
+library(sf)
+library(mapview)
+mapview(squirrels_eating_and_pizza, xcol = "long", ycol = "lat", crs = 4269, grid = FALSE, zcol = "source", legend = TRUE, alpha = .20)
+```
+
+### Interpretation 
+
+Given the interactive map, there is not a clear cluster of squirrels spotted feeding near pizza restaurants. This could be due many factors such as the relatively restricted size of Central Park, a multitude of food options for squirrels. 
