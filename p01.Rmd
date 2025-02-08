@@ -100,7 +100,7 @@ eating_squirrels <- nyc_squirrels %>%
 
 ### Combine data of squirrels sighted eating and pizza locations
 
-```{r combine-data}
+```{r combine-data-with-squirrels-eating}
 squirrels_eating_and_pizza <- bind_rows(eating_squirrels, pizza_nyc)
 print(squirrels_eating_and_pizza)
 ```
