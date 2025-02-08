@@ -2,10 +2,16 @@
 author: "Lilly McClendon"
 date: "2025-02-07"
 title: "Portfolio Piece 01"
-output: github_document
+output: html_document
 ---
 
-#### The purpose of Portfolio Piece 1 is to create plots of squirrel sightings in New York City and pizza locations in New York City. Using that data, use latitutde and longitude from both databases to see if there is a visual connection between squirrel sightings and pizza shop locations. Then the data will be transformed.
+#### The purpose of Portfolio Piece 1 is to create interactive maps using the mapview package. In fall of 2020, my friend sent me a picture of a squirrel eating a large piece of pizza up in a tree. 
+
+![Squirrel Eating Pizza!](p01/W&M_Squirrel_Pizza.png)
+
+
+
+#### of New York City squirrel sightings in Central Park and New York City pizza restaurant locations.
 
 ### Data Credits 
 
@@ -48,4 +54,45 @@ pizza_nyc <- pizza_datafiniti %>%
   filter(city == "New York")
 ```
 
+```{r change-lat-long-column-title-pizza}
+names(pizza_nyc)[names(pizza_nyc) == 'longitude'] <- 'long'
+names(pizza_nyc)[names(pizza_nyc) == 'latitude'] <- 'lat'
+```
+
 ### Combine squirrel and pizza data 
+
+```{r combine-data}
+nyc_squirrels <- nyc_squirrels %>% 
+  mutate(source = "squirrels")
+pizza_nyc <- pizza_nyc %>% 
+  mutate(source = "pizza")
+squirrels_and_pizza <- bind_rows(nyc_squirrels, pizza_nyc)
+print(squirrels_and_pizza)
+```
+
+
+### NYC Squirrel sightings and pizza restuarant plot. 
+
+```{r squirrels-and-pizza-plot}
+ggplot(squirrels_and_pizza) + 
+  geom_point(mapping = aes(x = long, y = lat,
+  color = source)) + 
+  labs(
+    title= "New York City Pizza Restaurant Locations and Squirrel Sightings",
+    x = "Longitude", 
+    y = "Latitude"
+    )
+```
+
+#### Install "sf" package in the R console by entering install.packages("sf"). Install "terra" package by entering "install.packages("terra) in the R console. 
+
+```{r squirrel-map}
+library(tidyverse)
+library(sf)
+library(mapview)
+mapview(squirrels_and_pizza, xcol = "long", ycol = "lat", crs = 4269, grid = FALSE, zcol = "source")
+```
+
+### In Central Park, does this data support the idea that squirrels like pizza? 
+
+
