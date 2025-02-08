@@ -10,7 +10,7 @@ output: html_document
 
 #### The purpose of Portfolio Piece 1 is to create interactive maps using the mapview package. In fall of 2020, my friend sent me a picture of a squirrel eating a large piece of pizza up in a tree. As many people consider New York City the place for pizza, I am interested to see how the location of squirrel sightings in Central Park and pizza restaurants. Further, I want to see if squirrels were spotted more frequently eating near pizza restaurants.  
 
-### Data Credits 
+#### Data Credits 
 
 [Data from NYC Squirrel Census](https://www.thesquirrelcensus.com/). Retrieved from [jonthegeek](https://github.com/rfordatascience/tidytuesday/tree/main/data/2019/2019-10-29) originally shared by Sara Stoudt. [Pizza Data](https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-10-01/pizza_datafiniti.csv")
 
