@@ -1,5 +1,40 @@
 ---
-title: "Portfolio 2"
+date: "2025-02-21"
+title: "Portfolio Piece 02"
+output: html_document
 ---
 
-> The projects should be numbered consecutively (i.e., in the order in which you began them), and should include for each project a description of the goal, the product (computer program, hand graph, computer graph, etc.), the data, and some interpretation. Reports must be reproducible and of high quality in terms of writing, grammar, presentation, etc.
+### Goal & Product
+
+The goal of Portfolio Piece 2 is to learn how to create figures for ANOVA results. The product will be a bar chart.
+
+```{r ANOVA-visualization}
+library(ggplot2)
+
+study1results <- data.frame(
+  Maintenance_Task_Domain = rep(c("Perception Maintenance", "Feeling Maintenance"), each = 4), 
+  Interference_Task_Domain = rep(c("Perception Interference", "Feeling Interference"), 2, each = 2),  
+  Valence = rep(c("Positive", "Negative"), 4),
+  Latent_Maintenance = c(.50295, .59911, .54535, .62849, .58661, .6778, .56274, .65339), 
+  Standard_Error = c(.034, .0309, .0337, .0287, .0315, .0279, .0338, .0278)
+)
+
+study1results$Task_Interaction <- interaction(study1results$Maintenance_Task_Domain, study1results$Interference_Task_Domain, sep = ": ")
+
+ggplot(study1results, aes(x = reorder(Task_Interaction, Latent_Maintenance), 
+                          y = Latent_Maintenance, 
+                          fill = Task_Interaction)) +
+  geom_bar(stat = "identity", width = 0.8) +
+  geom_errorbar(aes(ymin = Latent_Maintenance-Standard_Error, ymax = Latent_Maintenance+Standard_Error), position = position_dodge(0.9), width = 0.2) +
+  facet_wrap(~ Valence, ncol = 2) +
+  scale_fill_manual(values = c("Perception Maintenance: Perception Interference" = "red1", "Perception Maintenance: Feeling Interference" = "darkred", "Feeling Maintenance: Feeling Interference" = "royalblue1", "Feeling Maintenance: Perception Interference" = "navy")) + 
+  labs(y = "Latent Maintenance", title = "Three-Way Repeated Measures ANOVA Results") + 
+  theme_bw() + 
+  theme(legend.position = "bottom", "legend.direction" = "vertical") +
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(), 
+        legend.title = element_blank())
+```
+
+
+
