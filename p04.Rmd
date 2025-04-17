@@ -1,5 +1,101 @@
 ---
+date: "2025-04-18"
 title: "Portfolio 4"
+output: html_document
 ---
 
-> The projects should be numbered consecutively (i.e., in the order in which you began them), and should include for each project a description of the goal, the product (computer program, hand graph, computer graph, etc.), the data, and some interpretation. Reports must be reproducible and of high quality in terms of writing, grammar, presentation, etc.
+As some people are colorblind, or published articles may be printed (by the journal or reader), it is important that figures can be understood in  in gray scale. 
+
+```{r load-data} 
+library(openintro)
+
+assortative_mating <- assortative_mating 
+```
+
+```{r create-pairs}
+library(dplyr)
+
+couple_color <- assortative_mating %>% 
+  mutate(male_female = paste(self_male, partner_female))
+print(couple_color)
+```
+
+
+
+```{r create_bar_plot}
+library(ggplot2)
+
+ggplot(couple_color, aes(x=male_female, fill=male_female)) + 
+  geom_bar() + 
+  theme(axis.text.x= element_text(size=6)) + 
+  theme(axis.text.x = element_text(angle = 30))
+```
+
+```{r combine-same-pairs}
+library(stringr)
+
+split_couple <- str_split(couple_color$male_female, " ", simplify = TRUE)
+
+
+
+sorted_couple <- apply(split_couple, 1, function(x) sort(x, na.last = TRUE))
+
+couple_color$sorted_couple <- apply(sorted_couple, 2, paste, collapse = " ")
+
+```
+
+
+```{r plot_couple_colors_combined}
+
+library(ggplot2)
+
+ggplot(couple_color, aes(x=sorted_couple, fill = sorted_couple)) + 
+  geom_bar() + 
+  theme(axis.text.x = element_text(angle = 15)) + 
+  scale_fill_manual(values = c("blue3", 
+                               "lightblue4", 
+                               "turquoise",
+                               "brown4",
+                               "olivedrab",
+                               "forestgreen"
+                    ))
+```
+
+
+```{r plot_couple_colors_combined-gray sclae}
+
+library(ggplot2)
+
+ggplot(couple_color, aes(x=sorted_couple, fill = sorted_couple)) + 
+  geom_bar() + 
+  scale_fill_grey(start = 0, end= 0.8) + 
+  theme_bw() + 
+  theme(axis.text.x = element_blank())
+```
+
+
+```{r plot_couple_colors_combined-gray_scale_pattern}
+
+library(ggplot2)
+library(ggpattern)
+
+ggplot(couple_color, aes(x=sorted_couple, fill = sorted_couple)) + 
+  geom_bar_pattern(
+    aes(pattern=sorted_couple, 
+        pattern_angle = sorted_couple,
+        pattern_spacing=sorted_couple
+        ), 
+    fill = 'white', 
+    color = 'black',
+    pattern_density = 0.35, 
+    pattern_fill = 'black',
+    pattern_color = 'grey'
+  ) + 
+  
+  scale_fill_grey(start = 0, end= 0.8) + 
+  theme_bw() + 
+  theme(axis.text.x = element_blank())
+```
+
+
+
