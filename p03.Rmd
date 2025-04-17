@@ -1,5 +1,79 @@
 ---
-title: "Portfolio 3"
+date: "2025-04-18"
+title: "Portfolio Piece 3"
+output: html_document
 ---
 
-> The projects should be numbered consecutively (i.e., in the order in which you began them), and should include for each project a description of the goal, the product (computer program, hand graph, computer graph, etc.), the data, and some interpretation. Reports must be reproducible and of high quality in terms of writing, grammar, presentation, etc.
+In this portfolio piece, R will be used to create a hierarchial figure of trial types. 
+
+```{r study1_trial_types_figure}
+library(DiagrammeR)
+
+grViz("
+digraph G {
+rankdir=TB; //top-to-bottom 
+nodesep=1; 
+ranksep=1.2; 
+node [shape = box, style = filled, fillcolor = white, fontname = TimesNewRoman, width=.5, fixedsize=FALSE] 
+
+// Level 1 
+{rank=same;
+A1 [label = 'Study 1 Trial Types'];
+}
+
+// Level 2
+{rank=same; 
+B1 [label = 'Image 1 Maintain Physical Properties'];
+B2 [label = 'Image 1 Maintain Emotional Feelings']
+}
+
+// Level 3
+{rank=same;
+C1 [label = 'Image 2 Focus Physical Properties'];
+C2 [label = 'Image 2 Focus Emotional Feelings'];
+C3 [label = 'Image 2 Focus Physical Properties'];
+C4 [label = 'Image 2 Focus Emotional Feelings'];
+}
+
+// Level 4 
+{rank = same; 
+D1 [label = 'Negative'];
+D2 [label = 'Positive'];
+D3 [label = 'Negative'];
+D4 [label = 'Positive'];
+D5 [label = 'Negative'];
+D6 [label = 'Positive'];
+D7 [label = 'Negative'];
+D8 [label = 'Positive'];
+}
+
+
+// Invisible edges 
+B1 -> B2 [style=invis]; 
+C1 -> C2 [style=invis]; 
+C3 -> C4 [style=invis]; 
+D1 -> D2 [style=invis]; 
+D3 -> D4 [style=invis]; 
+D5 -> D6 [style=invis]; 
+D7 -> D8 [style=invis]; 
+
+A1 -> B1;
+A1 -> B2; 
+B1 -> C1;
+B1 -> C2;
+B2 -> C3; 
+B2 -> C4; 
+C1 -> D1; 
+C1 -> D2
+C2 -> D3;
+C2 -> D4; 
+C3 -> D5; 
+C3 -> D6; 
+C4 -> D7; 
+C4 -> D8
+}
+")
+
+```
+
+
