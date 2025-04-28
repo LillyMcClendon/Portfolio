@@ -1,5 +1,54 @@
 ---
+date: "2025-04-28"
 title: "Portfolio 6"
+output: html_document
 ---
 
-> The projects should be numbered consecutively (i.e., in the order in which you began them), and should include for each project a description of the goal, the product (computer program, hand graph, computer graph, etc.), the data, and some interpretation. Reports must be reproducible and of high quality in terms of writing, grammar, presentation, etc.
+The goal of this portfolio piece is to run a 3-way repeated measures ANOVA in R with simulated data. 
+
+```{r load_reshape_data_long}
+# load data 
+
+load(file.path("/Users/lillymcclendon/Desktop/Data Science/GitHub/Portfolio/p06/simulated_study1_data.RData"))
+
+library(dplyr)
+df_reshape <- simulated_study1_data %>% 
+  select(id, maintenance_C1C2N, maintenance_C1C2P, maintenance_C1F2N, maintenance_C1F2P, maintenance_F1C2N, maintenance_F1C2P, maintenance_F1F2N, maintenance_F1F2P)
+
+library(tidyverse)
+df_reshape_long <- df_reshape %>% 
+  pivot_longer(
+    cols = -id, 
+    names_to = "trial_type",
+    values_to = "latent_maintenance"
+  ) %>% 
+  mutate(
+    trial_type_coded= str_remove(trial_type, ".*_"),
+    maintain_inst = substr(trial_type_coded, 1, 2), 
+    inter_domain = substr(trial_type_coded, 3, 4), 
+    valence = substr(trial_type_coded, 5, 5)
+  )
+```
+
+```{r anova}
+library(afex)
+
+aov_result <- aov_ez(
+  id = "id", 
+  dv = "latent_maintenance", 
+  data = df_reshape_long, 
+  within = c("maintain_inst", "inter_domain", "valence")
+)
+
+summary(aov_result)
+nice(aov_result)
+
+library(emmeans)
+emm_means <- emmeans(aov_result, ~maintain_inst * inter_domain * valence)
+pairs(emm_means)
+
+```
+
+
+
+
