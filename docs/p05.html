@@ -10,10 +10,11 @@
 
 
 
+<meta name="date" content="2025-04-25" />
 
 <title>Portfolio 5</title>
 
-<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -141,11 +142,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -174,8 +179,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -183,16 +188,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -294,17 +292,135 @@ $(document).ready(function () {
 
 
 <h1 class="title toc-ignore">Portfolio 5</h1>
+<h4 class="date">2025-04-25</h4>
 
 </div>
 
 
-<blockquote>
-<p>The projects should be numbered consecutively (i.e., in the order in
-which you began them), and should include for each project a description
-of the goal, the product (computer program, hand graph, computer graph,
-etc.), the data, and some interpretation. Reports must be reproducible
-and of high quality in terms of writing, grammar, presentation, etc.</p>
-</blockquote>
+<p>The purpose of this portfolio piece is to be able to simulate
+data.</p>
+<pre class="r"><code>library(dyngen)
+
+set.seed(123)
+test_age &lt;- rnorm_bounded(96, mean = 18.68, sd=0.827, min = 18, max = 22)
+
+# add race variable
+race_categories &lt;- c(&quot;White&quot;, &quot;Black or African American&quot;, &quot;Asian&quot;, &quot;Multiracial&quot;)
+race_observations &lt;- c(71, 9, 10, 6)
+race_total_observations &lt;- sum(race_observations)
+race_vector &lt;- rep(race_categories, race_observations)
+simulated_race_data &lt;- sample(race_vector, size = race_total_observations, replace = FALSE)
+
+# add gender variable 
+
+gender_categories &lt;- c(&quot;female&quot;, &quot;male&quot;)
+gender_observations &lt;- c(74, 22)
+gender_total_observations &lt;- sum(gender_observations)
+gender_vector &lt;- rep(gender_categories, gender_observations)
+simulated_gender_data &lt;- sample (gender_vector, size = gender_total_observations, replace = FALSE)
+
+# add year in college variable 
+college_year_categories &lt;- c(&quot;First-year&quot;, &quot;Sophomore&quot;, &quot;Junior&quot;, &quot;Senior&quot;)
+college_year_observations &lt;- c(62, 28, 4, 2)
+college_year_total_observations &lt;- sum(college_year_observations)
+college_year_vector &lt;- rep(college_year_categories, college_year_observations)
+simulated_college_year_data &lt;- sample (college_year_vector, size = college_year_total_observations, replace = FALSE)
+
+# add Bias, Accuracy, Maintenance 
+set.seed(123)
+B1_overall &lt;- rnorm_bounded(96, mean = 0.4332, sd=0.16244)
+
+set.seed(123)
+maintenance_C1C2P &lt;- rnorm_bounded(96, mean = 0.502954395141895, sd=0.333174270165467 , min = -0.428571428571429, max = 1.0000000000000000)
+maintenance_C1C2N &lt;- rnorm_bounded(96, mean = 0.68, sd=3.031735315582456E-001 , min = -3.33333333333333E-001, max = 1.00000000000000E+000)
+maintenance_C1F2P &lt;- rnorm_bounded(96, mean = 5.991071428571430E-001, sd=0.330285955376412, min = -.7500000000000000, max = 1.0000000000000000)
+maintenance_C1F2N &lt;- rnorm_bounded(96, mean = 0.545349702380952, sd=0.281500720507717, min = -.166666666666667, max = 1.000000000000000)
+maintenance_F1C2P &lt;- rnorm_bounded(96, mean = 0.628492890211640, sd=0.309090063455520, min = -.5000000000000000, max = 1.0000000000000000)
+maintenance_F1C2N &lt;- rnorm_bounded(96, mean = 6.777984457671960E-001,sd=02.731687947814468E-001, min = -0.166666666666667 , max = 1.00000000000000E+000
+ )
+maintenance_F1F2P &lt;- rnorm_bounded(96, mean = 0.562743882275132, sd=0.330937935400283, min = -.5000000000000000
+, max = 1.0000000000000000
+)
+maintenance_F1F2N &lt;- rnorm_bounded(96, mean = 0.653393683862434, sd=0.272707709342485, min = -.0833333333333334, max = 1.0000000000000000)
+
+accuracy_C1C2P &lt;- rnorm_bounded(96, mean = 0.760851821789322, sd=0.149838763780694, min = .400000000000000, max = 1.000000000000000)
+accuracy_C1C2N &lt;- rnorm_bounded(96, mean = 0.802933351370851, sd=0.153103150775177, min =.250000000000000, max = 1.000000000000000)
+accuracy_C1F2P &lt;- rnorm_bounded(96, mean = 0.772726896945647, sd=0.156715130587448, min = .200000000000000, max = 1.000000000000000)
+accuracy_C1F2N &lt;- rnorm_bounded(96, mean = 0.822430029461279, sd=0.134136551033741, min = .375000000000000, max = 1.000000000000000)
+accuracy_F1C2P &lt;- rnorm_bounded(96, mean = 0.788517992424243, sd=0.150019393263568, min = .375000000000000, max = 1.000000000000000)
+accuracy_F1C2N &lt;- rnorm_bounded(96, mean = 0.835949525012025, sd=0.137927891118269, min = .333333333333333, max = 1.000000000000000)
+accuracy_F1F2P &lt;- rnorm_bounded(96, mean = 0.774868100649351, sd=0.156948966831221, min = .363636363636364, max = 1.000000000000000)
+accuracy_F1F2N &lt;- rnorm_bounded(96, mean = 0.824018082611833, sd=0.138047704650827, min = .428571428571429, max = 1.000000000000000)
+
+
+accuracy_1gtr3_C1C2P &lt;- rnorm_bounded(96, mean = 0.709109322390572, sd=0.254457284215179, min = .000000000000000, max = 1.000000000000000)
+accuracy_1gtr3_C1C2N &lt;- rnorm_bounded(96, mean = 0.709350198412698, sd=0.225374003195988, min = .000000000000000, max = 1.000000000000000)
+accuracy_1gtr3_C1F2P &lt;- rnorm_bounded(96, mean = 0.772933201058201, sd=0.222580314155232, min = .000000000000000, max = 1.000000000000000)
+accuracy_1gtr3_C1F2N &lt;- rnorm_bounded(96, mean = 0.731138392857143, sd=0.245026390367484, min = .000000000000000, max = 1.000000000000000)
+accuracy_1gtr3_F1C2P &lt;- rnorm_bounded(96, mean = 0.839471726190476, sd=0.179826693176675, min = .333333333333333, max = 1.000000000000000)
+accuracy_1gtr3_F1C2N &lt;- rnorm_bounded(96, mean = 0.789930555555556, sd=0.231070230420110, min = .000000000000000, max = 1.000000000000000)
+accuracy_1gtr3_F1F2P &lt;- rnorm_bounded(96, mean = 0.806878306878307, sd=0.207774595193830, min = .000000000000000, max = 1.000000000000000)
+accuracy_1gtr3_F1F2N &lt;- rnorm_bounded(96, mean = 0.800756448412699, sd=0.213781997755884, min = .250000000000000, max = 1.000000000000000)
+
+
+
+# add simulated data to data frame 
+
+simulated_study1_data &lt;- data.frame(id = 101:196, age = test_age, race = simulated_race_data, gender = simulated_gender_data, college_year = simulated_college_year_data, B1_overall = B1_overall, maintenance_C1C2P = maintenance_C1C2P, maintenance_C1C2N = maintenance_C1C2N, maintenance_C1F2P = maintenance_C1F2P, maintenance_C1F2N = maintenance_C1F2N, maintenance_F1C2P = maintenance_F1C2P, maintenance_F1C2N = maintenance_F1C2N,maintenance_F1F2P = maintenance_F1F2P, maintenance_F1F2N = maintenance_F1F2N, accuracy_C1C2P = accuracy_C1C2P, accuracy_C1C2N = accuracy_C1C2N, accuracy_C1F2P = accuracy_C1F2P, accuracy_C1F2N = accuracy_C1F2N, accuracy_F1C2P = accuracy_F1C2P, accuracy_F1C2N = accuracy_F1C2N,accuracy_F1F2P = accuracy_F1F2P, accuracy_F1F2N = accuracy_F1F2N, accuracy_1gtr3_C1C2P = accuracy_1gtr3_C1C2P, accuracy_1gtr3_C1C2N = accuracy_1gtr3_C1C2N, accuracy_1gtr3_C1F2P = accuracy_1gtr3_C1F2P, accuracy_1gtr3_C1F2N = accuracy_1gtr3_C1F2N, accuracy_1gtr3_F1C2P = accuracy_1gtr3_F1C2P, accuracy_1gtr3_F1C2N = accuracy_1gtr3_F1C2N, accuracy_1gtr3_F1F2P = accuracy_1gtr3_F1F2P, accuracy_1gtr3_F1F2N = accuracy_1gtr3_F1F2N)
+
+head(simulated_study1_data)</code></pre>
+<pre><code>##    id      age  race gender college_year B1_overall maintenance_C1C2P
+## 1 101 18.54245 White female   First-year  0.3421563        0.29868345
+## 2 102 19.47493 White   male   First-year  0.5632420        0.71254713
+## 3 103 18.74308 White female   First-year  0.3958100        0.40357914
+## 4 104 19.77385 White female   First-year  0.6265372        0.81226094
+## 5 105 20.06219 Asian   male       Senior  0.6863966        0.88913684
+## 6 106 18.10030 White female    Sophomore  0.1587486       -0.06213922
+##   maintenance_C1C2N maintenance_C1F2P maintenance_C1F2N maintenance_F1C2P
+## 1         0.8121022         0.9787925         0.1007600         0.6099409
+## 2         0.2547201         0.6408650         0.6436597         0.8989059
+## 3         0.6024370         0.9168033         0.3862139         0.3263444
+## 4         0.6321030         0.5274302         0.1854034         0.4199598
+## 5         0.6897273         0.4816934         0.1368831         0.2027417
+## 6         0.5074621         0.6701296         0.8188076         0.3530753
+##   maintenance_F1C2N maintenance_F1F2P maintenance_F1F2N accuracy_C1C2P
+## 1         0.4383085         0.4574425         0.2713945      0.8177073
+## 2         0.8347291        -0.1365236         0.4751208      0.8066679
+## 3         0.5118806         0.5745232         0.5698047      0.9268671
+## 4         0.7513577         0.5167419         0.6731511      0.8714089
+## 5         0.9295866         0.8375689         0.8165591      0.8150241
+## 6         0.3321415         0.7728155         0.4080718      0.8688321
+##   accuracy_C1C2N accuracy_C1F2P accuracy_C1F2N accuracy_F1C2P accuracy_F1C2N
+## 1      0.8248045      0.7612750      0.8557814      0.8632813      0.7035154
+## 2      0.6968110      0.7397335      0.7193800      0.9416450      0.8861107
+## 3      0.6387986      0.8033658      0.7368862      0.7840814      0.9204205
+## 4      0.6093773      0.5960567      0.8739304      0.7284011      0.8189517
+## 5      0.7865868      0.9293657      0.8778097      0.5593633      0.8363918
+## 6      0.8005670      0.7835958      0.6875619      0.9079580      0.4156391
+##   accuracy_F1F2P accuracy_F1F2N accuracy_1gtr3_C1C2P accuracy_1gtr3_C1C2N
+## 1      0.8173067      0.6720625            0.5958754            0.6415660
+## 2      0.9617981      0.8419122            0.4991116            0.7607205
+## 3      0.6797091      0.5818907            0.9362285            0.8992792
+## 4      0.8156433      0.8063138            0.6561009            0.9024018
+## 5      0.7739953      0.8829302            0.2754618            0.4865919
+## 6      0.7961692      0.8878600            0.8254897            0.5448507
+##   accuracy_1gtr3_C1F2P accuracy_1gtr3_C1F2N accuracy_1gtr3_F1C2P
+## 1            0.6980989            0.7109951            0.9031213
+## 2            0.5579263            0.9054957            0.7926170
+## 3            0.9958001            0.2832934            0.9942331
+## 4            0.7038653            0.9053840            0.7973902
+## 5            0.3434918            0.8087723            0.8208408
+## 6            0.9546711            0.8357195            0.7500060
+##   accuracy_1gtr3_F1C2N accuracy_1gtr3_F1F2P accuracy_1gtr3_F1F2N
+## 1            0.8584689            0.6110811            0.7829601
+## 2            0.5942969            0.7580207            0.6474897
+## 3            0.6470564            0.7701166            0.7044745
+## 4            0.1600707            0.6175667            0.8309644
+## 5            0.9981616            0.8750410            0.5677506
+## 6            0.7062764            0.3812140            0.5191725</code></pre>
+<pre class="r"><code># save simulated data 
+
+save(simulated_study1_data, file = &quot;simulated_study1_data.RData&quot;)</code></pre>
 
 
 
