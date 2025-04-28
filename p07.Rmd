@@ -1,5 +1,81 @@
 ---
+date: "2025-04-28"
 title: "Portfolio 7"
+output: html_document
 ---
 
-> The projects should be numbered consecutively (i.e., in the order in which you began them), and should include for each project a description of the goal, the product (computer program, hand graph, computer graph, etc.), the data, and some interpretation. Reports must be reproducible and of high quality in terms of writing, grammar, presentation, etc.
+The goal of this portfolio piece is to use R to create a table displaying results of a three-way repeated measures ANOVA (using simulated data). 
+
+```{r load_reshape_data_long}
+# load data 
+
+load(file.path("/Users/lillymcclendon/Desktop/Data Science/GitHub/Portfolio/p06/simulated_study1_data.RData"))
+
+library(dplyr)
+df_reshape <- simulated_study1_data %>% 
+  select(id, maintenance_C1C2N, maintenance_C1C2P, maintenance_C1F2N, maintenance_C1F2P, maintenance_F1C2N, maintenance_F1C2P, maintenance_F1F2N, maintenance_F1F2P)
+
+library(tidyverse)
+df_reshape_long <- df_reshape %>% 
+  pivot_longer(
+    cols = -id, 
+    names_to = "trial_type",
+    values_to = "latent_maintenance"
+  ) %>% 
+  mutate(
+    trial_type_coded= str_remove(trial_type, ".*_"),
+    maintain_inst = substr(trial_type_coded, 1, 2), 
+    inter_domain = substr(trial_type_coded, 3, 4), 
+    valence = substr(trial_type_coded, 5, 5)
+  )
+```
+
+
+```{r create_table}
+library(afex)
+library(knitr)
+library(kableExtra)
+
+results <- aov_ez( 
+  id = "id", 
+  dv = "latent_maintenance", 
+  data = df_reshape_long, 
+  within = c("maintain_inst", "inter_domain", "valence")
+  )
+
+
+df <- as.data.frame(results$anova_table)
+
+colnames(df)[colnames(df)== "Pr(>F)"] <- "p"
+colnames(df)[colnames(df)== "ges"] <- "GES"
+
+
+df$F <- round(df$F, 2)
+
+df$MSE <- round(df$MSE, 2)
+
+df$GES <- round(df$GES, 2)
+
+df$p <- ifelse(df$p<0.001, "<.001", format(round(df$p, 3), nsmall=3))
+
+rownames(df) <- c( 
+  "Maintenance Instruction", 
+  "Interference Domain", 
+  "Valence", 
+  "Maintenance Instruction * Interference Domain", 
+  "Maintenance Instruction * Valence", 
+  "Interference Domain * Valence", 
+  "Maintenance Instruction * Interference Domain * Valence")
+
+df %>% 
+  kable("html", caption = "Three-way Repeated Measures ANOVA") %>% 
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed"), 
+    html_font = "Times New Roman") 
+
+```
+
+
+
+
+

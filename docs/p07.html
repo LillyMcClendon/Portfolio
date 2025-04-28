@@ -10,10 +10,11 @@
 
 
 
+<meta name="date" content="2025-04-28" />
 
 <title>Portfolio 7</title>
 
-<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -32,6 +33,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -141,11 +144,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -174,8 +181,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -183,16 +190,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -294,17 +294,308 @@ $(document).ready(function () {
 
 
 <h1 class="title toc-ignore">Portfolio 7</h1>
+<h4 class="date">2025-04-28</h4>
 
 </div>
 
 
-<blockquote>
-<p>The projects should be numbered consecutively (i.e., in the order in
-which you began them), and should include for each project a description
-of the goal, the product (computer program, hand graph, computer graph,
-etc.), the data, and some interpretation. Reports must be reproducible
-and of high quality in terms of writing, grammar, presentation, etc.</p>
-</blockquote>
+<p>The goal of this portfolio piece is to use R to create a table
+displaying results of a three-way repeated measures ANOVA.</p>
+<pre class="r"><code># load data 
+
+load(file.path(&quot;/Users/lillymcclendon/Desktop/Data Science/GitHub/Portfolio/p06/simulated_study1_data.RData&quot;))
+
+library(dplyr)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<pre class="r"><code>df_reshape &lt;- simulated_study1_data %&gt;% 
+  select(id, maintenance_C1C2N, maintenance_C1C2P, maintenance_C1F2N, maintenance_C1F2P, maintenance_F1C2N, maintenance_F1C2P, maintenance_F1F2N, maintenance_F1F2P)
+
+library(tidyverse)</code></pre>
+<pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+## ✔ forcats   1.0.0     ✔ readr     2.1.5
+## ✔ ggplot2   3.5.1     ✔ stringr   1.5.1
+## ✔ lubridate 1.9.4     ✔ tibble    3.2.1
+## ✔ purrr     1.0.4     ✔ tidyr     1.3.1</code></pre>
+<pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+<pre class="r"><code>df_reshape_long &lt;- df_reshape %&gt;% 
+  pivot_longer(
+    cols = -id, 
+    names_to = &quot;trial_type&quot;,
+    values_to = &quot;latent_maintenance&quot;
+  ) %&gt;% 
+  mutate(
+    trial_type_coded= str_remove(trial_type, &quot;.*_&quot;),
+    maintain_inst = substr(trial_type_coded, 1, 2), 
+    inter_domain = substr(trial_type_coded, 3, 4), 
+    valence = substr(trial_type_coded, 5, 5)
+  )</code></pre>
+<pre class="r"><code>library(afex)</code></pre>
+<pre><code>## Loading required package: lme4</code></pre>
+<pre><code>## Loading required package: Matrix</code></pre>
+<pre><code>## 
+## Attaching package: &#39;Matrix&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:tidyr&#39;:
+## 
+##     expand, pack, unpack</code></pre>
+<pre><code>## ************
+## Welcome to afex. For support visit: http://afex.singmann.science/</code></pre>
+<pre><code>## - Functions for ANOVAs: aov_car(), aov_ez(), and aov_4()
+## - Methods for calculating p-values with mixed(): &#39;S&#39;, &#39;KR&#39;, &#39;LRT&#39;, and &#39;PB&#39;
+## - &#39;afex_aov&#39; and &#39;mixed&#39; objects can be passed to emmeans() for follow-up tests
+## - Get and set global package options with: afex_options()
+## - Set sum-to-zero contrasts globally: set_sum_contrasts()
+## - For example analyses see: browseVignettes(&quot;afex&quot;)
+## ************</code></pre>
+<pre><code>## 
+## Attaching package: &#39;afex&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:lme4&#39;:
+## 
+##     lmer</code></pre>
+<pre class="r"><code>library(knitr)
+library(kableExtra)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;kableExtra&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
+## 
+##     group_rows</code></pre>
+<pre class="r"><code>results &lt;- aov_ez( 
+  id = &quot;id&quot;, 
+  dv = &quot;latent_maintenance&quot;, 
+  data = df_reshape_long, 
+  within = c(&quot;maintain_inst&quot;, &quot;inter_domain&quot;, &quot;valence&quot;)
+  )
+
+
+df &lt;- as.data.frame(results$anova_table)
+
+colnames(df)[colnames(df)== &quot;Pr(&gt;F)&quot;] &lt;- &quot;p&quot;
+colnames(df)[colnames(df)== &quot;ges&quot;] &lt;- &quot;GES&quot;
+
+
+df$F &lt;- round(df$F, 2)
+
+df$MSE &lt;- round(df$MSE, 2)
+
+df$GES &lt;- round(df$GES, 2)
+
+df$p &lt;- ifelse(df$p&lt;0.001, &quot;&lt;.001&quot;, format(round(df$p, 3), nsmall=3))
+
+rownames(df) &lt;- c( 
+  &quot;Maintenance Instruction&quot;, 
+  &quot;Interference Domain&quot;, 
+  &quot;Valence&quot;, 
+  &quot;Maintenance Instruction * Interference Domain&quot;, 
+  &quot;Maintenance Instruction * Valence&quot;, 
+  &quot;Interference Domain * Valence&quot;, 
+  &quot;Maintenance Instruction * Interference Domain * Valence&quot;)
+
+df %&gt;% 
+  kable(&quot;html&quot;, caption = &quot;Three-way Repeated Measures ANOVA&quot;) %&gt;% 
+  kable_styling(
+    bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;, &quot;condensed&quot;), 
+    html_font = &quot;Times New Roman&quot;) </code></pre>
+<table class="table table-striped table-hover table-condensed" style="font-family: Times New Roman; margin-left: auto; margin-right: auto;">
+<caption>
+Three-way Repeated Measures ANOVA
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+num Df
+</th>
+<th style="text-align:right;">
+den Df
+</th>
+<th style="text-align:right;">
+MSE
+</th>
+<th style="text-align:right;">
+F
+</th>
+<th style="text-align:right;">
+GES
+</th>
+<th style="text-align:left;">
+p
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Maintenance Instruction
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+95
+</td>
+<td style="text-align:right;">
+0.09
+</td>
+<td style="text-align:right;">
+2.73
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:left;">
+0.102
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Interference Domain
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+95
+</td>
+<td style="text-align:right;">
+0.07
+</td>
+<td style="text-align:right;">
+2.00
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:left;">
+0.161
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Valence
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+95
+</td>
+<td style="text-align:right;">
+0.06
+</td>
+<td style="text-align:right;">
+17.55
+</td>
+<td style="text-align:right;">
+0.02
+</td>
+<td style="text-align:left;">
+&lt;.001
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Maintenance Instruction * Interference Domain
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+95
+</td>
+<td style="text-align:right;">
+0.06
+</td>
+<td style="text-align:right;">
+0.51
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:left;">
+0.477
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Maintenance Instruction * Valence
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+95
+</td>
+<td style="text-align:right;">
+0.07
+</td>
+<td style="text-align:right;">
+0.01
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:left;">
+0.937
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Interference Domain * Valence
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+95
+</td>
+<td style="text-align:right;">
+0.07
+</td>
+<td style="text-align:right;">
+6.46
+</td>
+<td style="text-align:right;">
+0.01
+</td>
+<td style="text-align:left;">
+0.013
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Maintenance Instruction * Interference Domain * Valence
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+95
+</td>
+<td style="text-align:right;">
+0.05
+</td>
+<td style="text-align:right;">
+4.62
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:left;">
+0.034
+</td>
+</tr>
+</tbody>
+</table>
 
 
 
