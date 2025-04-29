@@ -1,33 +1,107 @@
 ---
+date: "2025-04-28"
 title: "Portfolio 9"
+output: html_document
 ---
 
-> The projects should be numbered consecutively (i.e., in the order in which you began them), and should include for each project a description of the goal, the product (computer program, hand graph, computer graph, etc.), the data, and some interpretation. Reports must be reproducible and of high quality in terms of writing, grammar, presentation, etc.
+The purpose of this portfolio piece is to create an interactive map showing UFO sightings by year. 
 
 
----
-date: "2025-04-25"
-title: "Portfolio 5"
-outputL html_document
----
+```{r load_data}
 
+tuesdata <- tidytuesdayR::tt_load('2023-06-20')
 
-
-
-## scrape 
-```{r scrape_alaska_page}
-# load packages 
-library(tidyverse) 
-library(rvest)
-
-## first URL 
-
-url <- "https://www.bfro.net/GDB/state_listing.asp?state=ak" 
-
-page <- read_html(url) 
-headers <- page %>% 
-html_nodes(".countytbl") %>% 
-html_text() %>% 
-str_squish()
+ufo_sightings <- tuesdata$`ufo_sightings`
+places <- tuesdata$`places`
+day_parts_map <- tuesdata$`day_parts_map`
 ```
+
+```{r filter_data}
+library(dplyr)
+library(stringr)
+
+ufo_data <- ufo_sightings %>%
+  filter(country_code =="US")
+
+ufo_data$reported_date_time_utc <- as.Date(ufo_data$reported_date_time_utc) 
+
+print("Extract year")
+ufo_data$year <- as.numeric(format(ufo_data$reported_date_time_utc,"%Y"))
+ufo_data
+```
+
+```{r load_us_map_data}
+library(ggplot2)
+
+us_map <- map_data("usa")
+
+head(us_map)
+ggplot(us_map, aes(long, lat, group = group)) + 
+  geom_polygon(color = "blue", fill = "grey")
+
+
+us_states <- map_data("state")
+head(us_states)
+
+ggplot(us_states, aes(long, lat, group = group)) + 
+  geom_polygon(color="blue", fill= "grey")
+
+```
+
+```{r combine_data}
+library(usdata)
+library(dplyr)
+library(tidyverse)
+
+ufo_data$region <-tolower(state.name[match(ufo_data$state, state.abb)])
+
+summary_ufo_data <- ufo_data %>% 
+  group_by(region, year) %>%
+  summarise(count = n(),.groups = 'drop')
+summary_ufo_data <- summary_ufo_data %>% 
+  filter(!region %in% c("alaska", "hawaii"))
+
+years <- unique(summary_ufo_data$year)
+
+us_map_df <- expand.grid(region = unique(us_states$region), year = years) %>% 
+  left_join(us_states, by = "region") %>% 
+  left_join(summary_ufo_data, by = c("region", "year"))
+
+```
+
+
+```{r animation, echo = FALSE, warning=FALSE, message=FALSE}
+library(gganimate)
+library(ggplot2)
+library(viridis)
+
+animation <- ggplot(us_map_df, aes(x=long, y = lat, group = group, fill = count)) + 
+  geom_polygon(color = "white") +
+  coord_fixed(1.3) + 
+  theme_void() + 
+  scale_fill_viridis_c(option = "C", na.value = "grey90") + 
+  labs(title = "United States UFO Sightings - Year: {frame_time}", fill = "sightings") + 
+  transition_states(
+    year, 
+    transition_length = 2, 
+    state_length = 1
+  ) + 
+  enter_fade() + 
+  exit_fade()
+
+animate(animation, nframes = 100, fps = 10, rewind = TRUE, renderer =gifski_renderer("ufo_sightings.gif"))
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
 
