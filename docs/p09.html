@@ -376,32 +376,62 @@ head(us_states)</code></pre>
 <pre class="r"><code>ggplot(us_states, aes(long, lat, group = group)) + 
   geom_polygon(color=&quot;blue&quot;, fill= &quot;grey&quot;)</code></pre>
 <p><img src="p09_files/figure-html/load_us_map_data-2.png" width="672" /></p>
-<pre class="r"><code>library(usdata)
-library(dplyr)
-library(tidyverse)</code></pre>
-<pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-## ✔ forcats   1.0.0     ✔ readr     2.1.5
-## ✔ lubridate 1.9.4     ✔ tibble    3.2.1
-## ✔ purrr     1.0.4     ✔ tidyr     1.3.1
-## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()
-## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
-<pre class="r"><code>ufo_data$region &lt;-tolower(state.name[match(ufo_data$state, state.abb)])
+<pre class="r"><code>library(dplyr) 
 
-summary_ufo_data &lt;- ufo_data %&gt;% 
-  group_by(region, year) %&gt;%
-  summarise(count = n(),.groups = &#39;drop&#39;)
+count_ufo &lt;- ufo_data %&gt;% 
+  group_by(year, state) %&gt;% 
+  summarize(count = n(), .groups = &#39;drop&#39;)</code></pre>
+<pre class="r"><code>library(dplyr)
+library(usmap)
+library(plotly)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;plotly&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:ggplot2&#39;:
+## 
+##     last_plot</code></pre>
+<pre><code>## The following object is masked from &#39;package:stats&#39;:
+## 
+##     filter</code></pre>
+<pre><code>## The following object is masked from &#39;package:graphics&#39;:
+## 
+##     layout</code></pre>
+<pre class="r"><code>library(htmlwidgets)
 
-years &lt;- unique(summary_ufo_data$year)
-us_map_df &lt;- expand.grid(region = unique(us_states$region), year = years) %&gt;% 
-  left_join(us_states, by = &quot;region&quot;) %&gt;% 
-  left_join(summary_ufo_data, by = c(&quot;region&quot;, &quot;year&quot;))</code></pre>
-<pre><code>## Warning in left_join(., us_states, by = &quot;region&quot;): Detected an unexpected many-to-many relationship between `x` and `y`.
-## ℹ Row 1 of `x` matches multiple rows in `y`.
-## ℹ Row 1 of `y` matches multiple rows in `x`.
-## ℹ If a many-to-many relationship is expected, set `relationship =
-##   &quot;many-to-many&quot;` to silence this warning.</code></pre>
+count_ufo$year &lt;- as.factor(count_ufo$year)
+
+count_ufo &lt;- count_ufo %&gt;% 
+  filter(!is.na(year), 
+         !is.na(count), 
+         !is.na(state)
+  )
+
+
+animated_map &lt;- plot_ly(
+  data = count_ufo, 
+  type = &quot;choropleth&quot;, 
+  locations = ~state, 
+  z = ~count,
+  color = ~count, 
+  colors = &quot;Blues&quot;, 
+  locationmode = &quot;USA-states&quot;, 
+  frame = ~year, 
+  text = ~paste(state, &quot;&lt;br&gt;count: &quot;, count), 
+  hoverinfo = &quot;text&quot;, 
+  colorbar = list(title = &quot;Count&quot;)
+) %&gt;% 
+  layout(
+    geo = list(
+      scope = &quot;usa&quot;, 
+      projection = list(type = &quot;albers usa&quot;), 
+      showlakes = TRUE, 
+      lakecolor = &quot;rgb(255, 255, 255)&quot;
+  ), 
+  title = &quot;United States UFO Sightings by Year&quot;
+  )
+
+saveWidget(animated_map, &quot;us_animated_map.html&quot;)
+
+browseURL(&quot;us_animated_map.html&quot;)</code></pre>
 
 
 

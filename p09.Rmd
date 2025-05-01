@@ -48,59 +48,59 @@ ggplot(us_states, aes(long, lat, group = group)) +
 
 ```
 
-```{r combine_data}
-library(usdata)
+
+```{r count_sightings_by_year_and_region}
+library(dplyr) 
+
+count_ufo <- ufo_data %>% 
+  group_by(year, state) %>% 
+  summarize(count = n(), .groups = 'drop')
+
+```
+
+```{r ufo_sightings_animation}
 library(dplyr)
-library(tidyverse)
+library(usmap)
+library(plotly)
+library(htmlwidgets)
 
-ufo_data$region <-tolower(state.name[match(ufo_data$state, state.abb)])
+count_ufo$year <- as.factor(count_ufo$year)
 
-summary_ufo_data <- ufo_data %>% 
-  group_by(region, year) %>%
-  summarise(count = n(),.groups = 'drop')
-summary_ufo_data <- summary_ufo_data %>% 
-  filter(!region %in% c("alaska", "hawaii"))
+count_ufo <- count_ufo %>% 
+  filter(!is.na(year), 
+         !is.na(count), 
+         !is.na(state)
+  )
 
-years <- unique(summary_ufo_data$year)
 
-us_map_df <- expand.grid(region = unique(us_states$region), year = years) %>% 
-  left_join(us_states, by = "region") %>% 
-  left_join(summary_ufo_data, by = c("region", "year"))
+animated_map <- plot_ly(
+  data = count_ufo, 
+  type = "choropleth", 
+  locations = ~state, 
+  z = ~count,
+  color = ~count, 
+  colors = "Blues", 
+  locationmode = "USA-states", 
+  frame = ~year, 
+  text = ~paste(state, "<br>count: ", count), 
+  hoverinfo = "text", 
+  colorbar = list(title = "Count")
+) %>% 
+  layout(
+    geo = list(
+      scope = "usa", 
+      projection = list(type = "albers usa"), 
+      showlakes = TRUE, 
+      lakecolor = "rgb(255, 255, 255)"
+  ), 
+  title = "United States UFO Sightings by Year"
+  )
+
+saveWidget(animated_map, "us_animated_map.html")
+
+browseURL("us_animated_map.html")
 
 ```
-
-
-```{r animation, echo = FALSE, warning=FALSE, message=FALSE}
-library(gganimate)
-library(ggplot2)
-library(viridis)
-
-animation <- ggplot(us_map_df, aes(x=long, y = lat, group = group, fill = count)) + 
-  geom_polygon(color = "white") +
-  coord_fixed(1.3) + 
-  theme_void() + 
-  scale_fill_viridis_c(option = "C", na.value = "grey90") + 
-  labs(title = "United States UFO Sightings - Year: {frame_time}", fill = "sightings") + 
-  transition_states(
-    year, 
-    transition_length = 2, 
-    state_length = 1
-  ) + 
-  enter_fade() + 
-  exit_fade()
-
-animate(animation, nframes = 100, fps = 10, rewind = TRUE, renderer =gifski_renderer("ufo_sightings.gif"))
-
-```
-
-
-
-
-
-
-
-
-
 
 
 
