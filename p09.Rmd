@@ -1,5 +1,5 @@
 ---
-date: "2025-04-28"
+date: "2025-05-01"
 title: "Portfolio 9"
 output: html_document
 ---
@@ -101,6 +101,13 @@ saveWidget(animated_map, "us_animated_map.html")
 browseURL("us_animated_map.html")
 
 ```
+
+```{r embed_map}
+<iframe src ="us_animated_map.html" width="100%" height="600px"></iframe>
+  
+rmarkdown::render("ufo_map.Rmd")
+```
+
 
 
 
