@@ -4,7 +4,7 @@ title: "Portfolio 9"
 output: html_document
 ---
 
-The purpose of this portfolio piece is to create an interactive map showing UFO sightings by year. 
+The purpose of this portfolio piece is to create an animated map showing UFO sightings by year. If you knit the Rmd file, it will open a tab in a browser with the animation and there is a play button on the bottom. 
 
 
 ```{r load_data}
@@ -102,11 +102,6 @@ browseURL("us_animated_map.html")
 
 ```
 
-```{r embed_map}
-<iframe src ="us_animated_map.html" width="100%" height="600px"></iframe>
-  
-rmarkdown::render("ufo_map.Rmd")
-```
 
 
 
