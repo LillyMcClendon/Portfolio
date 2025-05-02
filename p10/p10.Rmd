@@ -1,7 +1,7 @@
 ---
 date: "2025-05-01"
 title: "Portfolio 10"
-output: 
+output:
   html_document:
     toc: true
     toc_float: true
