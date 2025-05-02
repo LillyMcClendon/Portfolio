@@ -10,10 +10,11 @@
 
 
 
+<meta name="date" content="2025-05-01" />
 
 <title>Portfolio 10</title>
 
-<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -29,6 +30,9 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -141,11 +145,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -174,8 +182,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -183,16 +191,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -222,6 +223,69 @@ $(document).ready(function () {
 
 
 
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
 
 </head>
 
@@ -229,6 +293,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -294,112 +368,500 @@ $(document).ready(function () {
 
 
 <h1 class="title toc-ignore">Portfolio 10</h1>
+<h4 class="date">2025-05-01</h4>
 
 </div>
 
 
-<blockquote>
-<p>The projects should be numbered consecutively (i.e., in the order in
-which you began them), and should include for each project a description
-of the goal, the product (computer program, hand graph, computer graph,
-etc.), the data, and some interpretation. Reports must be reproducible
-and of high quality in terms of writing, grammar, presentation, etc.</p>
-</blockquote>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-hendrerit purus ut dapibus vestibulum. Suspendisse potenti. Cras
-faucibus mauris in leo condimentum lobortis. Cras euismod sollicitudin
-augue, ut venenatis quam placerat eu. Maecenas vulputate rhoncus odio,
-in interdum risus malesuada gravida. Maecenas cursus sed dui sit amet
-lacinia. Nunc dignissim metus nec ex mattis, non rutrum urna cursus.
-Morbi pretium elementum purus, in aliquet libero eleifend ac. Nam
-finibus, ligula sed ultrices pharetra, tellus risus consequat tortor,
-facilisis maximus elit lectus a metus. Sed vel dictum nulla, vitae
-blandit turpis. Integer pulvinar tempor diam ac venenatis. Vestibulum
-est lacus, suscipit et ipsum nec, consectetur iaculis leo. Morbi libero
-lacus, scelerisque non sollicitudin vitae, accumsan sed tellus.
-Suspendisse quis orci tellus.</p>
-<div id="r-markdown" class="section level2">
-<h2>R Markdown</h2>
-<p>This is an R Markdown document. Markdown is a simple formatting
-syntax for authoring HTML, PDF, and MS Word documents. For more details
-on using R Markdown see <a href="http://rmarkdown.rstudio.com"
-class="uri">http://rmarkdown.rstudio.com</a>.</p>
-<p>When you click the <strong>Knit</strong> button a document will be
-generated that includes both content as well as the output of any
-embedded R code chunks within the document. You can embed an R code
-chunk like this:</p>
-<pre class="r"><code>summary(cars)</code></pre>
-<pre><code>##      speed           dist       
-##  Min.   : 4.0   Min.   :  2.00  
-##  1st Qu.:12.0   1st Qu.: 26.00  
-##  Median :15.0   Median : 36.00  
-##  Mean   :15.4   Mean   : 42.98  
-##  3rd Qu.:19.0   3rd Qu.: 56.00  
-##  Max.   :25.0   Max.   :120.00</code></pre>
-<p>Maecenas luctus convallis efficitur. Vestibulum pharetra laoreet nibh
-non congue. Etiam ornare, neque sit amet condimentum aliquet, odio ipsum
-porttitor elit, eu malesuada turpis augue sit amet arcu. Integer nec
-quam et massa congue tincidunt. Donec sit amet diam placerat, pharetra
-quam nec, ornare nisl. Quisque erat turpis, imperdiet eget tellus non,
-interdum ultricies nisi. Fusce a erat est. Nunc sollicitudin ante non
-eros vulputate, sed eleifend nulla hendrerit. Nam ac quam nulla.
-Praesent a ligula a justo auctor tristique ac vel neque. Class aptent
-taciti sociosqu ad litora torquent per conubia nostra, per inceptos
-himenaeos. Quisque tempor felis sed lorem efficitur volutpat. Aliquam
-lectus diam, lacinia vitae velit eget, pulvinar porta massa. Curabitur
-nec egestas mi.</p>
+<p>The purpose of the last portfolio piece is to create a document that
+has code chunks for various tasks that can be easily accessed and
+referred to.</p>
+<div id="codes" class="section level1 tabset">
+<h1 class="tabset">Codes</h1>
+<div id="data-processing" class="section level2">
+<h2>Data processing</h2>
+<div id="filter-data" class="section level3">
+<h3>Filter data</h3>
+<pre class="r"><code># ```{r filter}
+# filtered_data &lt;- data %&gt;%
+#  filter(dataset == &quot;column_want_to_filter_for&quot;)
+# ```</code></pre>
 </div>
-<div id="including-plots" class="section level2">
-<h2>Including Plots</h2>
-<p>You can also embed plots, for example:</p>
-<p><img src="p10_files/figure-html/pressure-1.png" width="672" /></p>
-<p>Note that the <code>echo = FALSE</code> parameter was added to the
-code chunk to prevent printing of the R code that generated the
-plot.</p>
-<p>Morbi tincidunt mollis odio sit amet feugiat. Ut vel risus eu ante
-dictum consequat. Integer et luctus mauris. Donec nec faucibus urna, sed
-commodo risus. Nam elementum pulvinar erat, eget convallis est blandit
-vel. Etiam gravida sapien eu massa hendrerit maximus. Proin dolor quam,
-porta vitae libero non, venenatis porta tellus. Vivamus et elit a est
-aliquet consequat. Proin tempus, purus quis suscipit placerat, dui nunc
-euismod dui, sit amet luctus leo lectus in risus. Phasellus consectetur
-eleifend arcu. Nullam venenatis blandit nulla ut ullamcorper. Vestibulum
-eu arcu quis massa scelerisque sodales in ac augue. Quisque dapibus
-fringilla turpis, ut cursus tortor cursus sed. Sed facilisis quam eget
-neque viverra venenatis. Suspendisse ut lorem nec erat elementum
-bibendum. Curabitur lobortis purus in cursus blandit.</p>
-<p>Aliquam sed ex et lorem consequat feugiat at porta leo. Fusce id
-hendrerit tellus. Maecenas dictum felis neque, quis dictum metus
-tristique eu. Vivamus sed blandit nisl. Integer ut urna dolor. Cras in
-egestas eros, in aliquam nisi. Duis vitae elementum quam. Vivamus vel
-turpis commodo, porttitor urna vitae, viverra sem. Nam nec dignissim
-erat, id viverra libero. Integer vel lectus pellentesque tortor
-fringilla posuere. Vivamus quis magna accumsan, porta tortor at, aliquam
-urna. Aliquam vestibulum ante massa, ut gravida lectus sagittis
-vitae.</p>
-<p>Sed eget ipsum auctor, gravida magna sit amet, tincidunt mi. Nulla
-erat ante, volutpat nec sem eget, luctus posuere est. Praesent convallis
-nunc ac turpis bibendum, in maximus magna convallis. Vestibulum ante
-ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae;
-Sed sit amet nulla ante. Sed elit sem, lobortis nec nisi a, rhoncus
-ornare nunc. Curabitur ultrices neque feugiat, facilisis magna eu,
-consectetur magna. Mauris id eleifend ex.</p>
-<p>Morbi tincidunt mollis odio sit amet feugiat. Ut vel risus eu ante
-dictum consequat. Integer et luctus mauris. Donec nec faucibus urna, sed
-commodo risus. Nam elementum pulvinar erat, eget convallis est blandit
-vel. Etiam gravida sapien eu massa hendrerit maximus. Proin dolor quam,
-porta vitae libero non, venenatis porta tellus. Vivamus et elit a est
-aliquet consequat. Proin tempus, purus quis suscipit placerat, dui nunc
-euismod dui, sit amet luctus leo lectus in risus. Phasellus consectetur
-eleifend arcu. Nullam venenatis blandit nulla ut ullamcorper. Vestibulum
-eu arcu quis massa scelerisque sodales in ac augue. Quisque dapibus
-fringilla turpis, ut cursus tortor cursus sed. Sed facilisis quam eget
-neque viverra venenatis. Suspendisse ut lorem nec erat elementum
-bibendum. Curabitur lobortis purus in cursus blandit.</p>
+<div id="filter-data-for-column-value-of-certain-value"
+class="section level3">
+<h3>Filter data for column value of certain value</h3>
+<pre class="r"><code># ```{r column_value_over_number}
+# data_name %&gt;%
+#  filter(column_name &gt; 1.0)
+# ```</code></pre>
+</div>
+<div id="create-new-column" class="section level3">
+<h3>Create new column</h3>
+<pre class="r"><code># ```{r mutate, eval=TRUE}
+# new_data_name &lt;- data_name %&gt;% 
+#  mutate( 
+#    column_name = if_else(born_country == &quot;value1&quot;, &quot;value2&quot;, &quot;value3&quot;))
+# ```</code></pre>
+</div>
+<div id="join-datasets" class="section level3">
+<h3>Join datasets</h3>
+<pre class="r"><code># ```{r join_data}
+# data_combined &lt;- full_join(data1, data2, by = &quot;shared_column_name&quot;)
+# data_combined
+# ```</code></pre>
+</div>
+<div id="variable-names" class="section level3">
+<h3>Variable Names</h3>
+<pre class="r"><code># ```{r variable_names}
+# library(dplyr)
+# count(data_name)
+# colnames(data_name)
+# ```</code></pre>
+</div>
+<div id="separate-values-uoe-example" class="section level3">
+<h3>Separate values (uoe example)</h3>
+<pre class="r"><code># ```{r separate-title_uoe_example, error = TRUE}
+# uoe_art &lt;- uoe_art %&gt;%
+#  separate(title, into = c(&quot;title&quot;, &quot;date&quot;), sep = &quot;\\(&quot;) %&gt;%
+#  mutate(year = str_remove(date, &quot;\\)&quot;) %&gt;% as.numeric()) %&gt;%
+#  select(title, artist, year, date)
+# ```</code></pre>
+</div>
+</div>
+<div id="charts" class="section level2">
+<h2>Charts</h2>
+<div id="scatter-plot" class="section level3">
+<h3>Scatter plot</h3>
+<pre class="r"><code># ```{r scatter_plot, fig.height=3, fig.width=6}
+# ggplot(data = your_data_name, mapping = aes(x = x, y = y)) +
+# geom_point()
+# ```</code></pre>
+</div>
+<div id="scatter-plot-with-colored-dots" class="section level3">
+<h3>Scatter plot with colored dots</h3>
+<pre class="r"><code># ```{r scatter_plot_colors}
+# ggplot(data_name, aes(x = column_name, y = column_name, color = column_name)) + 
+#  geom_point() + 
+#  labs(title = &quot;Figure Title&quot;)
+# ```</code></pre>
+</div>
+<div id="histogram" class="section level3">
+<h3>Histogram</h3>
+<pre class="r"><code># ```{r histogram}
+# ggplot(data = data_name, aes(x = column_name)) +
+#  geom_histogram(binwidth = 0.2) + 
+#  labs(title = &quot;Figure Title&quot;)
+# ```</code></pre>
+</div>
+<div id="histogram-with-facet" class="section level3">
+<h3>Histogram with facet</h3>
+<pre class="r"><code># Will produce multiple histograms 
+# ```{r histogram-facet-by-for_example_country}
+# ggplot(plastic_waste, aes(x=column_name)) +
+#  geom_histogram() +
+#  facet_wrap(~continent) +
+#  labs(title = &quot;Column Name (e.g., Plastic waste per capita) by country&quot;)
+# ```</code></pre>
+</div>
+<div id="bar-plot-with-facet" class="section level3">
+<h3>Bar plot with facet</h3>
+<pre class="r"><code># ```{r faceted_bar_plot}
+#data_name %&gt;% 
+#  ggplot(aes(x=column_name)) + 
+#  geom_bar() + 
+#  ggtitle(&quot;Figure Title&quot;) + 
+#  facet_wrap(~column_name)
+# ``` </code></pre>
+</div>
+<div id="horizontal-bar-plot-with-facet" class="section level3">
+<h3>Horizontal Bar plot with facet</h3>
+<pre class="r"><code># ```{r horizontal_faceted_bar_plot}
+# data_name %&gt;% 
+#  ggplot(aes(x=column_name)) + 
+#  geom_bar() + 
+#  ggtitle(&quot;Figure Title&quot;) + 
+#  facet_wrap(~column_name) + 
+#  coord_flip()
+# ``` </code></pre>
+</div>
+<div id="stacked-bar-plot" class="section level3">
+<h3>Stacked bar plot</h3>
+<pre class="r"><code># ```{r plot-bornus-resideus, eval = TRUE}
+# ggplot(data_name, aes(x=column_name, fill=column_name, color=same_as_fill)) + 
+#  geom_bar(stat = &quot;count&quot;) +
+#  ggtitle(&quot;Figure Title&quot;) +
+#  facet_wrap(~column)name
+# ```</code></pre>
+</div>
+<div id="density-plot" class="section level3">
+<h3>Density plot</h3>
+<pre class="r"><code># ```{r density_plot}
+# ggplot(data = data_name, aes(x = column_name)) +
+#  geom_density() + 
+#  labs(title = &quot;Figure Title&quot;)
+# ```</code></pre>
+</div>
+<div id="overlaid-density-plot" class="section level3">
+<h3>Overlaid density plot</h3>
+<pre class="r"><code># ```{r density_plot_multiple_lines}
+# ggplot(data = data_name, aes(x = column_name, shape = column_name_for_variable_want_each_line_to_represent)) +
+#  geom_density() + 
+#  labs(title = &quot;Figure Title&quot;)
+# ```</code></pre>
+</div>
+<div id="color-coded-overlaid-density-plot" class="section level3">
+<h3>Color-coded overlaid Density Plot</h3>
+<pre class="r"><code># ```{r desnity_plot_multiple_lines_color_coded}
+# ggplot(data = data_name, mapping = aes(x = column_name, color = column_name_for_variable_want_each_line_to_represent)) +
+# geom_density() + 
+#  labs(title = &quot;Figure Title&quot;)
+# ```</code></pre>
+</div>
+<div id="density-plot-filled-curves" class="section level3">
+<h3>Density plot filled curves</h3>
+<pre class="r"><code># ```{r density_curve_fill_colored}
+# ggplot(data = data_name, mapping = aes(x = column_name, color = column_name_for_variable_want_each_line_to_represent, fill = same_column_name_as_color)) +
+#  geom_density() + 
+#  labs(title = &quot;Figure Title&quot;)
+# ``` </code></pre>
+</div>
+<div id="density-plot-filled-curves-transparency"
+class="section level3">
+<h3>Density plot filled curves transparency</h3>
+<pre class="r"><code># ```{r density_curve_fill_colored_transparency}
+# ggplot(data = data_name, mapping = aes(x = column_name, color = column_name_for_variable_want_each_line_to_represent, fill = same_column_name_as_color)) +
+# geom_density(alpha = .25) + 
+#  labs(title = &quot;Figure Title&quot;)
+# ```</code></pre>
+</div>
+<div id="side-by-side-box-plots" class="section level3">
+<h3>Side by side box plots</h3>
+<pre class="r"><code># ```{r side_by_side_box_plots}
+# ggplot(data = data_name, mapping = aes(x = column_name, y = column_name)) +
+#  geom_boxplot() + 
+#  labs(title = &quot;Figure Title&quot;)
+# ```</code></pre>
+</div>
+<div id="violin-plots" class="section level3">
+<h3>Violin plots</h3>
+<pre class="r"><code># ```{r violin_plot}
+# ggplot(data_name, aes(x = column_name, y=column_name))+
+#  geom_violin() + 
+#  labs(title = &quot;Figure Title&quot;)
+# ```</code></pre>
+</div>
+<div id="scatter-plot-with-longitude-and-latitude"
+class="section level3">
+<h3>Scatter plot with longitude and latitude</h3>
+<pre class="r"><code># ```{r scatter_plot_lat_long}
+# ggplot(dataPname) + 
+#  geom_point(mapping = aes(x = longitude, y = latitude,
+#  color = column_name)) + 
+#  labs(
+#    title= &quot;Figure Title&quot;,
+#    x = &quot;Longitude&quot;, 
+#    y = &quot;Latitude&quot;,
+#    tag = &quot;Figure 1&quot;)
+# ```</code></pre>
+</div>
+<div id="line-plot" class="section level3">
+<h3>Line plot</h3>
+<pre class="r"><code># ```{r line-plot}
+# library(ggplot2)
+# data_name %&gt;%
+#  ggplot(aes(
+#    x = column_name,
+#    y = column_name,
+#    group = column_name,
+#    color = same_as_group)) + 
+#  labs(title = &quot;Figure Title&quot;, x = &quot;X axis label&quot;, y = &quot;Y axis label&quot;) + 
+#  geom_line() + 
+#  guides(color = guide_legend(title = &quot;Lengend Title&quot;))
+# ``` </code></pre>
+</div>
+<div id="bar-plot-descending-and-x-axis-label-tilted"
+class="section level3">
+<h3>Bar plot descending and x axis label tilted</h3>
+<pre class="r"><code># ```{r bar_plot_desc_xlabel_tilt}
+# library(ggplot2)
+# ggplot(data_name, aes(x=column_name)) + 
+#  geom_bar(aes(x=forcats::fct_infreq(column_name))) + 
+#  theme(axis.text.x = element_text(angle = 20, vjust = .5))
+# ```</code></pre>
+</div>
+<div
+id="arrange-bar-plot-in-specific-order-of-x-axis-label-age-group-example"
+class="section level3">
+<h3>Arrange bar plot in specific order of x axis label (age group
+example)</h3>
+<pre class="r"><code># ```{r demographic_distribution_age_cat_reorder}
+# library(ggplot2)
+# library(tidyverse)
+
+# agecat_compas &lt;- subset(compas, select=c(&quot;age_cat&quot;))
+
+# agecat_compas$age_cat &lt;- factor(agecat_compas$age_cat, levels = c (&quot;Less than 25&quot;, &quot;25 - 45&quot;, &quot;Greater than 45&quot;))
+
+# ggplot(agecat_compas, aes(x=age_cat)) + 
+#  geom_bar() + 
+#  labs(x=&quot;Age Category&quot;, y = &quot;Count&quot;)
+# ```</code></pre>
+</div>
+<div id="jitter-plot" class="section level3">
+<h3>Jitter plot</h3>
+<pre class="r"><code># ```{r jitterplot}
+# library(ggplot2)
+# ggplot(data_name, aes(x=column_name, y=column_name)) + 
+#  geom_jitter()
+# ``` </code></pre>
+</div>
+<div id="jitter-plot-with-regression-line-example"
+class="section level3">
+<h3>Jitter plot with regression line example</h3>
+<pre class="r"><code># ```{r jitterplot_regression_line}
+# library(ggplot2)
+# ggplot(evals, aes(x=bty_avg, y=score)) + 
+#  geom_jitter() +
+#  geom_smooth(method=&#39;lm&#39;, color=&quot;orange&quot;, se=FALSE)
+# ```</code></pre>
+</div>
+</div>
+<div id="calculations" class="section level2">
+<h2>Calculations</h2>
+<div id="correlation-calculation" class="section level3">
+<h3>Correlation calculation</h3>
+<pre class="r"><code># ```{r correlation}
+# your_data_name %&gt;%
+#   summarize(r = cor(x, y))
+# ```</code></pre>
+</div>
+<div id="number-of-rows" class="section level3">
+<h3>Number of rows</h3>
+<pre class="r"><code># ```{r number_rows}
+# new_data &lt;- original_data %&gt;%
+#  filter(column_name == &quot;value_filter_for&quot;)
+# nrow(new_data)
+# view(new_data)
+# ```</code></pre>
+</div>
+<div id="count" class="section level3">
+<h3>Count</h3>
+<pre class="r"><code># ```{r count}
+# library(dplyr)
+# data_name %&gt;% 
+# count(column_name)%&gt;%
+# arrange(desc(n))
+# ``` </code></pre>
+</div>
+<div id="count-regardless-of-capitalization-uoe-example"
+class="section level3">
+<h3>Count regardless of capitalization (uoe example)</h3>
+<pre class="r"><code>### ```{r child_in_title}
+### library(stringr)
+### library(dplyr)
+
+### count_title_includes_child &lt;- sum(str_detect(uoe_art_corrected$title, regex(&quot;child\\b&quot;, ignore_case = TRUE)))
+
+### count_title_includes_children &lt;- sum(str_detect(uoe_art_corrected$title, regex(&quot;child&quot;, ignore_case = TRUE)))
+
+### print(count_title_includes_child)
+### print(count_title_includes_children)
+# ``` </code></pre>
+</div>
+<div id="descriptive-statistics" class="section level3">
+<h3>Descriptive Statistics</h3>
+<pre class="r"><code># ```{r descriptive-stats}
+# summary(data_name)
+# IQR(data_name$closest)
+# table &lt;- table(data_name)
+# print(table)
+# ```</code></pre>
+</div>
+<div id="mean-and-sd" class="section level3">
+<h3>Mean and SD</h3>
+<pre class="r"><code># ```{r mean_sd}
+# summarize(data_name, 
+#          mean_score = mean(score_or_variable_name), 
+#         sd_score = sd(score_or_variable_name))
+# ``` </code></pre>
+</div>
+<div id="iqr" class="section level3">
+<h3>IQR</h3>
+<pre class="r"><code># ```{r IQR}
+# IQR(data_name$closest)
+# IQR_data_name &lt;- [insert numerical IQR value here] 
+# quart1_data_name &lt;- [insert numerical IQR value here] 
+# quart3_data_name &lt;- [insert numerical IQR value here] 
+# print(quart1_data_name - (IQR_data_name*1.5))
+# print(quart3_data_name + (IQR_data_name*1.5))
+# ```</code></pre>
+</div>
+<div id="combinations" class="section level3">
+<h3>Combinations</h3>
+<pre class="r"><code># ```{r combinations}
+# total_combinations &lt;- nrow(data1) * nrow(data2)
+# print(total_combinations)
+# ```</code></pre>
+</div>
+<div id="haversine-formula" class="section level3">
+<h3>Haversine formula</h3>
+<pre class="r"><code># ```{r Haversine-distance-formula}
+# haversine &lt;- function(long1, lat1, long2, lat2, round = 3) {
+  # convert to radians
+#  long1 &lt;- long1 * pi / 180
+#  lat1 &lt;- lat1 * pi / 180
+#  long2 &lt;- long2 * pi / 180
+#  lat2 &lt;- lat2 * pi / 180
+
+#  R &lt;- 6371 # Earth mean radius in km
+
+#  a &lt;- sin((lat2 - lat1) / 2)^2 + cos(lat1) * cos(lat2) * sin((long2 - long1) / 2)^2
+#  d &lt;- R * 2 * asin(sqrt(a))
+
+#  return(round(d, round)) # distance in km
+# }
+# ```</code></pre>
+</div>
+<div id="calculate-distance-and-sort-by-minimum-distance"
+class="section level3">
+<h3>Calculate distance and sort by minimum distance</h3>
+<pre class="r"><code># ```{r add_distance}
+# data_name &lt;- data_name %&gt;%
+#  mutate(distance = haversine(longitude.x, latitude.x, longitude.y, latitude.y, round = 3))
+
+# data_name_mindist &lt;- data_name %&gt;%
+#  group_by(address.x) %&gt;%
+#  summarize(closest = min(distance))
+# ```</code></pre>
+</div>
+</div>
+<div id="regression-formulas-examples" class="section level2">
+<h2>Regression Formulas Examples</h2>
+<div id="linear-regression-with-numerical-predictor-example"
+class="section level3">
+<h3>Linear regression with numerical predictor example</h3>
+<pre class="r"><code># ```{r linear_reg_fit}
+# m_bty &lt;- linear_reg() %&gt;% 
+# set_engine(&quot;lm&quot;) %&gt;% 
+#  fit(score ~ bty_avg, data = evals) %&gt;% 
+# tidy()
+# ``` </code></pre>
+<p><span class="math inline">\(\hat{\text{Score}}_i\)</span> = 3.88 +
+0.07 x bty_avg<span class="math inline">\(_i\)</span></p>
+</div>
+<div id="r-squared-example" class="section level3">
+<h3>R-squared example</h3>
+<pre class="r"><code># ```{r m_bty-rsquared}
+# library(tidymodels)
+# library(broom)
+
+# R_m_bty &lt;- linear_reg() %&gt;% 
+#  set_engine(&quot;lm&quot;) %&gt;% 
+#  fit(score ~ bty_avg, data = evals)
+
+# broom::glance(R_m_bty$fit)
+# ``` </code></pre>
+</div>
+<div id="linear-regression-with-categorical-predictor-example"
+class="section level3">
+<h3>Linear regression with categorical predictor example</h3>
+<pre class="r"><code># ```{r regression_gender_scores}
+# m_gen &lt;- lm(score ~ gender, data = evals)
+# tidy(m_gen)
+# contrasts(evals$gender)
+# ```</code></pre>
+</div>
+<div id="regression-with-new-reference-group-example"
+class="section level3">
+<h3>Regression with new reference group example</h3>
+<pre class="r"><code># ```{r m_rank_relevel_model}
+# m_rank_relevel &lt;- lm(score ~ rank_relevel, data = evals)
+# tidy(m_rank_relevel)
+# contrasts(evals$rank_relevel)
+
+# library(tidymodels)
+# library(broom)
+
+# R_m_rank_relevel &lt;- linear_reg() %&gt;% 
+#  set_engine(&quot;lm&quot;) %&gt;% 
+#  fit(score ~ rank_relevel, data = evals)
+
+# broom::glance(R_m_rank_relevel$fit)
+# ``` </code></pre>
+</div>
+<div id="multiple-linear-regression-example" class="section level3">
+<h3>Multiple linear regression example</h3>
+<pre class="r"><code># ```{r linear-regression-bty_avg-gender}
+# m_bty_gen &lt;- linear_reg() %&gt;% 
+#  set_engine(&quot;lm&quot;) %&gt;% 
+#  fit(score ~ bty_avg + gender, data = evals)
+# tidy(m_bty_gen)
+# contrasts(evals$gender)
+
+# broom::glance(m_bty_gen$fit)
+
+# tidy(m_bty_gen) %&gt;% 
+# mutate(exp_estimate = exp(estimate)) %&gt;% 
+#  select(term, estimate, exp_estimate)
+# ``` </code></pre>
+</div>
+<div id="search-for-best-model-backward-selection-example"
+class="section level3">
+<h3>Search for best model (backward selection) example</h3>
+<pre class="r"><code># ```{r backward-selection}
+# library(MASS)
+
+# lm_full_model &lt;- lm(score ~ rank + ethnicity + gender + language + age + cls_perc_eval + cls_students + cls_level + cls_profs + cls_credits + bty_avg, data = evals)
+
+# best_model &lt;- stepAIC(lm_full_model, direction = &quot;backward&quot;, trace = 1)
+# summary(best_model)
+
+# best_model_only_best &lt;- stepAIC(lm_full_model, direction = &quot;backward&quot;, trace = 0)
+# summary(best_model_only_best)
+# ```</code></pre>
+</div>
+<div id="full-model-of-best-model-example" class="section level3">
+<h3>Full model of best model example</h3>
+<pre class="r"><code># ```{r linear-regression-full_model-best-fit}
+# m_best_full_model &lt;- linear_reg() %&gt;% 
+#  set_engine(&quot;lm&quot;) %&gt;% 
+#  fit(score ~  ethnicity + gender + cls_perc_eval + cls_credits + bty_avg, data = evals) %&gt;% 
+# tidy()
+# view(m_best_full_model)
+
+# library(tidymodels)
+# library(broom)
+
+# R_m_best_full_model &lt;- linear_reg() %&gt;% 
+#  set_engine(&quot;lm&quot;) %&gt;% 
+#  fit(score ~ ethnicity + gender + cls_perc_eval + cls_credits + bty_avg, data = evals)
+
+# broom::glance(R_m_best_full_model$fit)
+
+# contrasts(evals$gender)
+# contrasts(evals$ethnicity)
+# contrasts(evals$cls_credits)
+# ``` </code></pre>
+</div>
+</div>
+<div id="emojis" class="section level2">
+<h2>Emojis</h2>
+<div id="emojis-1" class="section level3">
+<h3>Emojis</h3>
+<pre class="r"><code># ```{r emojis}
+# install.packages(&quot;emoji&quot;)
+# library(emojifont)
+# search_emoji(&#39;smile&#39;)
+# cat(&quot;Text to be displayed&quot;, emoji(&quot;smiley_cat&quot;))
+# ```</code></pre>
+</div>
+</div>
 </div>
 
 
 
+</div>
+</div>
 
 </div>
 
@@ -432,6 +894,35 @@ $(document).ready(function () {
 
 <!-- code folding -->
 
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
