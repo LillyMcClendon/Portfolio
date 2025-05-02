@@ -1,20 +1,601 @@
 ---
+date: "2025-05-01"
 title: "Portfolio 10"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
 ---
 
-> The projects should be numbered consecutively (i.e., in the order in which you began them), and should include for each project a description of the goal, the product (computer program, hand graph, computer graph, etc.), the data, and some interpretation. Reports must be reproducible and of high quality in terms of writing, grammar, presentation, etc.
+The purpose of the last portfolio piece is to create a document that has code chunks for various tasks that can be easily accessed and referred to. 
 
+# Codes {.tabset}
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed hendrerit purus ut dapibus vestibulum. Suspendisse potenti. Cras faucibus mauris in leo condimentum lobortis. Cras euismod sollicitudin augue, ut venenatis quam placerat eu. Maecenas vulputate rhoncus odio, in interdum risus malesuada gravida. Maecenas cursus sed dui sit amet lacinia. Nunc dignissim metus nec ex mattis, non rutrum urna cursus. Morbi pretium elementum purus, in aliquet libero eleifend ac. Nam finibus, ligula sed ultrices pharetra, tellus risus consequat tortor, facilisis maximus elit lectus a metus. Sed vel dictum nulla, vitae blandit turpis. Integer pulvinar tempor diam ac venenatis. Vestibulum est lacus, suscipit et ipsum nec, consectetur iaculis leo. Morbi libero lacus, scelerisque non sollicitudin vitae, accumsan sed tellus. Suspendisse quis orci tellus.
+## Data processing 
 
+### Filter data 
 
-```{r, child='p10/demo.Rmd'}
+```{r filter}
+# ```{r filter}
+# filtered_data <- data %>%
+#  filter(dataset == "column_want_to_filter_for")
+# ```
+```
+
+### Filter data for column value of certain value 
+
+```{r column_value_over_number}
+# ```{r column_value_over_number}
+# data_name %>%
+#  filter(column_name > 1.0)
+# ```
 ```
 
 
-Aliquam sed ex et lorem consequat feugiat at porta leo. Fusce id hendrerit tellus. Maecenas dictum felis neque, quis dictum metus tristique eu. Vivamus sed blandit nisl. Integer ut urna dolor. Cras in egestas eros, in aliquam nisi. Duis vitae elementum quam. Vivamus vel turpis commodo, porttitor urna vitae, viverra sem. Nam nec dignissim erat, id viverra libero. Integer vel lectus pellentesque tortor fringilla posuere. Vivamus quis magna accumsan, porta tortor at, aliquam urna. Aliquam vestibulum ante massa, ut gravida lectus sagittis vitae.
+### Create new column 
 
-Sed eget ipsum auctor, gravida magna sit amet, tincidunt mi. Nulla erat ante, volutpat nec sem eget, luctus posuere est. Praesent convallis nunc ac turpis bibendum, in maximus magna convallis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Sed sit amet nulla ante. Sed elit sem, lobortis nec nisi a, rhoncus ornare nunc. Curabitur ultrices neque feugiat, facilisis magna eu, consectetur magna. Mauris id eleifend ex.
+```{r mutate, eval=TRUE}
+# ```{r mutate, eval=TRUE}
+# new_data_name <- data_name %>% 
+#  mutate( 
+#    column_name = if_else(born_country == "value1", "value2", "value3"))
+# ```
+```
 
-Morbi tincidunt mollis odio sit amet feugiat. Ut vel risus eu ante dictum consequat. Integer et luctus mauris. Donec nec faucibus urna, sed commodo risus. Nam elementum pulvinar erat, eget convallis est blandit vel. Etiam gravida sapien eu massa hendrerit maximus. Proin dolor quam, porta vitae libero non, venenatis porta tellus. Vivamus et elit a est aliquet consequat. Proin tempus, purus quis suscipit placerat, dui nunc euismod dui, sit amet luctus leo lectus in risus. Phasellus consectetur eleifend arcu. Nullam venenatis blandit nulla ut ullamcorper. Vestibulum eu arcu quis massa scelerisque sodales in ac augue. Quisque dapibus fringilla turpis, ut cursus tortor cursus sed. Sed facilisis quam eget neque viverra venenatis. Suspendisse ut lorem nec erat elementum bibendum. Curabitur lobortis purus in cursus blandit.
+
+### Join datasets 
+
+```{r join_data}
+# ```{r join_data}
+# data_combined <- full_join(data1, data2, by = "shared_column_name")
+# data_combined
+# ```
+```
+
+
+### Variable Names 
+
+```{r variable_names}
+# ```{r variable_names}
+# library(dplyr)
+# count(data_name)
+# colnames(data_name)
+# ```
+```
+
+
+### Separate values (uoe example)
+
+```{r separate-title_uoe_example, error = TRUE}
+# ```{r separate-title_uoe_example, error = TRUE}
+# uoe_art <- uoe_art %>%
+#  separate(title, into = c("title", "date"), sep = "\\(") %>%
+#  mutate(year = str_remove(date, "\\)") %>% as.numeric()) %>%
+#  select(title, artist, year, date)
+# ```
+```
+
+
+## Charts 
+
+### Scatter plot 
+
+```{r scatter_plot, fig.height=3, fig.width=6}
+# ```{r scatter_plot, fig.height=3, fig.width=6}
+# ggplot(data = your_data_name, mapping = aes(x = x, y = y)) +
+# geom_point()
+# ```
+```
+
+
+### Scatter plot with colored dots 
+
+```{r scatter_plot_colors}
+# ```{r scatter_plot_colors}
+# ggplot(data_name, aes(x = column_name, y = column_name, color = column_name)) + 
+#  geom_point() + 
+#  labs(title = "Figure Title")
+# ```
+```
+
+
+### Histogram 
+
+```{r histogram}
+# ```{r histogram}
+# ggplot(data = data_name, aes(x = column_name)) +
+#  geom_histogram(binwidth = 0.2) + 
+#  labs(title = "Figure Title")
+# ```
+```
+
+
+### Histogram with facet 
+
+```{r histogram-facet-by-for_example_country}
+# Will produce multiple histograms 
+# ```{r histogram-facet-by-for_example_country}
+# ggplot(plastic_waste, aes(x=column_name)) +
+#  geom_histogram() +
+#  facet_wrap(~continent) +
+#  labs(title = "Column Name (e.g., Plastic waste per capita) by country")
+# ```
+```
+
+
+### Bar plot with facet 
+
+```{r faceted_bar_plot}
+# ```{r faceted_bar_plot}
+#data_name %>% 
+#  ggplot(aes(x=column_name)) + 
+#  geom_bar() + 
+#  ggtitle("Figure Title") + 
+#  facet_wrap(~column_name)
+# ``` 
+```
+
+
+### Horizontal Bar plot with facet 
+
+```{r horizontal_faceted_bar_plot}
+# ```{r horizontal_faceted_bar_plot}
+# data_name %>% 
+#  ggplot(aes(x=column_name)) + 
+#  geom_bar() + 
+#  ggtitle("Figure Title") + 
+#  facet_wrap(~column_name) + 
+#  coord_flip()
+# ``` 
+```
+
+
+### Stacked bar plot 
+
+```{r plot-bornus-resideus, eval = TRUE}
+# ```{r plot-bornus-resideus, eval = TRUE}
+# ggplot(data_name, aes(x=column_name, fill=column_name, color=same_as_fill)) + 
+#  geom_bar(stat = "count") +
+#  ggtitle("Figure Title") +
+#  facet_wrap(~column)name
+# ```
+```
+
+
+### Density plot 
+
+```{r density_plot}
+# ```{r density_plot}
+# ggplot(data = data_name, aes(x = column_name)) +
+#  geom_density() + 
+#  labs(title = "Figure Title")
+# ```
+```
+
+
+### Overlaid density plot 
+
+```{r density_plot_multiple_lines}
+# ```{r density_plot_multiple_lines}
+# ggplot(data = data_name, aes(x = column_name, shape = column_name_for_variable_want_each_line_to_represent)) +
+#  geom_density() + 
+#  labs(title = "Figure Title")
+# ```
+```
+
+
+### Color-coded overlaid Density Plot 
+
+```{r desnity_plot_multiple_lines_color_coded}
+# ```{r desnity_plot_multiple_lines_color_coded}
+# ggplot(data = data_name, mapping = aes(x = column_name, color = column_name_for_variable_want_each_line_to_represent)) +
+# geom_density() + 
+#  labs(title = "Figure Title")
+# ```
+```
+
+
+### Density plot filled curves 
+
+```{r density_curve_fill_colored}
+# ```{r density_curve_fill_colored}
+# ggplot(data = data_name, mapping = aes(x = column_name, color = column_name_for_variable_want_each_line_to_represent, fill = same_column_name_as_color)) +
+#  geom_density() + 
+#  labs(title = "Figure Title")
+# ``` 
+```
+
+
+### Density plot filled curves transparency 
+
+```{r density_curve_fill_colored_transparency}
+# ```{r density_curve_fill_colored_transparency}
+# ggplot(data = data_name, mapping = aes(x = column_name, color = column_name_for_variable_want_each_line_to_represent, fill = same_column_name_as_color)) +
+# geom_density(alpha = .25) + 
+#  labs(title = "Figure Title")
+# ```
+```
+
+
+### Side by side box plots 
+
+```{r side_by_side_box_plots}
+# ```{r side_by_side_box_plots}
+# ggplot(data = data_name, mapping = aes(x = column_name, y = column_name)) +
+#  geom_boxplot() + 
+#  labs(title = "Figure Title")
+# ```
+```
+
+
+### Violin plots 
+
+```{r violin_plot}
+# ```{r violin_plot}
+# ggplot(data_name, aes(x = column_name, y=column_name))+
+#  geom_violin() + 
+#  labs(title = "Figure Title")
+# ```
+```
+
+
+### Scatter plot with longitude and latitude 
+
+```{r scatter_plot_lat_long}
+# ```{r scatter_plot_lat_long}
+# ggplot(dataPname) + 
+#  geom_point(mapping = aes(x = longitude, y = latitude,
+#  color = column_name)) + 
+#  labs(
+#    title= "Figure Title",
+#    x = "Longitude", 
+#    y = "Latitude",
+#    tag = "Figure 1")
+# ```
+```
+
+
+### Line plot 
+
+```{r line-plot}
+# ```{r line-plot}
+# library(ggplot2)
+# data_name %>%
+#  ggplot(aes(
+#    x = column_name,
+#    y = column_name,
+#    group = column_name,
+#    color = same_as_group)) + 
+#  labs(title = "Figure Title", x = "X axis label", y = "Y axis label") + 
+#  geom_line() + 
+#  guides(color = guide_legend(title = "Lengend Title"))
+# ``` 
+```
+
+
+### Bar plot descending and x axis label tilted 
+
+```{r bar_plot_desc_xlabel_tilt}
+# ```{r bar_plot_desc_xlabel_tilt}
+# library(ggplot2)
+# ggplot(data_name, aes(x=column_name)) + 
+#  geom_bar(aes(x=forcats::fct_infreq(column_name))) + 
+#  theme(axis.text.x = element_text(angle = 20, vjust = .5))
+# ```
+```
+
+
+### Arrange bar plot in specific order of x axis label (age group example)
+
+```{r demographic_distribution_age_cat_reorder}
+# ```{r demographic_distribution_age_cat_reorder}
+# library(ggplot2)
+# library(tidyverse)
+
+# agecat_compas <- subset(compas, select=c("age_cat"))
+
+# agecat_compas$age_cat <- factor(agecat_compas$age_cat, levels = c ("Less than 25", "25 - 45", "Greater than 45"))
+
+# ggplot(agecat_compas, aes(x=age_cat)) + 
+#  geom_bar() + 
+#  labs(x="Age Category", y = "Count")
+# ```
+```
+
+
+### Jitter plot 
+
+```{r jitterplot}
+# ```{r jitterplot}
+# library(ggplot2)
+# ggplot(data_name, aes(x=column_name, y=column_name)) + 
+#  geom_jitter()
+# ``` 
+```
+
+
+### Jitter plot with regression line example 
+
+```{r jitterplot_regression_line}
+# ```{r jitterplot_regression_line}
+# library(ggplot2)
+# ggplot(evals, aes(x=bty_avg, y=score)) + 
+#  geom_jitter() +
+#  geom_smooth(method='lm', color="orange", se=FALSE)
+# ```
+```
+
+
+## Calculations 
+
+### Correlation calculation 
+
+```{r correlation}
+# ```{r correlation}
+# your_data_name %>%
+#   summarize(r = cor(x, y))
+# ```
+```
+
+
+### Number of rows 
+```{r number_rows}
+# ```{r number_rows}
+# new_data <- original_data %>%
+#  filter(column_name == "value_filter_for")
+# nrow(new_data)
+# view(new_data)
+# ```
+```
+
+
+### Count 
+
+```{r count}
+# ```{r count}
+# library(dplyr)
+# data_name %>% 
+# count(column_name)%>%
+# arrange(desc(n))
+# ``` 
+```
+
+
+### Count regardless of capitalization (uoe example)
+
+```{r child_in_title}
+### ```{r child_in_title}
+### library(stringr)
+### library(dplyr)
+
+### count_title_includes_child <- sum(str_detect(uoe_art_corrected$title, regex("child\\b", ignore_case = TRUE)))
+
+### count_title_includes_children <- sum(str_detect(uoe_art_corrected$title, regex("child", ignore_case = TRUE)))
+
+### print(count_title_includes_child)
+### print(count_title_includes_children)
+# ``` 
+```
+
+
+### Descriptive Statistics 
+
+``` {r descriptive-stats}
+# ``` {r descriptive-stats}
+# summary(data_name)
+# IQR(data_name$closest)
+# table <- table(data_name)
+# print(table)
+# ```
+```
+
+
+### Mean and SD
+
+```{r mean_sd}
+# ```{r mean_sd}
+# summarize(data_name, 
+#          mean_score = mean(score_or_variable_name), 
+#         sd_score = sd(score_or_variable_name))
+# ``` 
+```
+
+
+### IQR 
+
+```{r IQR}
+# ```{r IQR}
+# IQR(data_name$closest)
+# IQR_data_name <- [insert numerical IQR value here] 
+# quart1_data_name <- [insert numerical IQR value here] 
+# quart3_data_name <- [insert numerical IQR value here] 
+# print(quart1_data_name - (IQR_data_name*1.5))
+# print(quart3_data_name + (IQR_data_name*1.5))
+# ```
+```
+
+
+### Combinations 
+
+```{r combinations}
+# ```{r combinations}
+# total_combinations <- nrow(data1) * nrow(data2)
+# print(total_combinations)
+# ```
+```
+
+
+### Haversine formula 
+
+```{r Haversine-distance-formula}
+# ```{r Haversine-distance-formula}
+# haversine <- function(long1, lat1, long2, lat2, round = 3) {
+  # convert to radians
+#  long1 <- long1 * pi / 180
+#  lat1 <- lat1 * pi / 180
+#  long2 <- long2 * pi / 180
+#  lat2 <- lat2 * pi / 180
+
+#  R <- 6371 # Earth mean radius in km
+
+#  a <- sin((lat2 - lat1) / 2)^2 + cos(lat1) * cos(lat2) * sin((long2 - long1) / 2)^2
+#  d <- R * 2 * asin(sqrt(a))
+
+#  return(round(d, round)) # distance in km
+# }
+# ```
+```
+
+
+### Calculate distance and sort by minimum distance 
+
+```{r add_distance}
+# ```{r add_distance}
+# data_name <- data_name %>%
+#  mutate(distance = haversine(longitude.x, latitude.x, longitude.y, latitude.y, round = 3))
+
+# data_name_mindist <- data_name %>%
+#  group_by(address.x) %>%
+#  summarize(closest = min(distance))
+# ```
+```
+
+
+## Regression Formulas Examples 
+
+### Linear regression with numerical predictor example 
+
+```{r linear_reg_fit}
+# ```{r linear_reg_fit}
+# m_bty <- linear_reg() %>% 
+# set_engine("lm") %>% 
+#  fit(score ~ bty_avg, data = evals) %>% 
+# tidy()
+# ``` 
+```
+
+$\hat{\text{Score}}_i$ = 3.88 + 0.07 x bty_avg$_i$
+
+
+### R-squared example 
+
+```{r m_bty-rsquared}
+# ```{r m_bty-rsquared}
+# library(tidymodels)
+# library(broom)
+
+# R_m_bty <- linear_reg() %>% 
+#  set_engine("lm") %>% 
+#  fit(score ~ bty_avg, data = evals)
+
+# broom::glance(R_m_bty$fit)
+# ``` 
+```
+
+
+### Linear regression with categorical predictor example 
+
+```{r regression_gender_scores}
+# ```{r regression_gender_scores}
+# m_gen <- lm(score ~ gender, data = evals)
+# tidy(m_gen)
+# contrasts(evals$gender)
+# ```
+```
+
+
+### Regression with new reference group example
+
+```{r m_rank_relevel_model}
+# ```{r m_rank_relevel_model}
+# m_rank_relevel <- lm(score ~ rank_relevel, data = evals)
+# tidy(m_rank_relevel)
+# contrasts(evals$rank_relevel)
+
+# library(tidymodels)
+# library(broom)
+
+# R_m_rank_relevel <- linear_reg() %>% 
+#  set_engine("lm") %>% 
+#  fit(score ~ rank_relevel, data = evals)
+
+# broom::glance(R_m_rank_relevel$fit)
+# ``` 
+```
+
+
+### Multiple linear regression example 
+
+```{r linear-regression-bty_avg-gender}
+# ```{r linear-regression-bty_avg-gender}
+# m_bty_gen <- linear_reg() %>% 
+#  set_engine("lm") %>% 
+#  fit(score ~ bty_avg + gender, data = evals)
+# tidy(m_bty_gen)
+# contrasts(evals$gender)
+
+# broom::glance(m_bty_gen$fit)
+
+# tidy(m_bty_gen) %>% 
+# mutate(exp_estimate = exp(estimate)) %>% 
+#  select(term, estimate, exp_estimate)
+# ``` 
+```
+
+
+### Search for best model (backward selection) example 
+
+```{r backward-selection}
+# ```{r backward-selection}
+# library(MASS)
+
+# lm_full_model <- lm(score ~ rank + ethnicity + gender + language + age + cls_perc_eval + cls_students + cls_level + cls_profs + cls_credits + bty_avg, data = evals)
+
+# best_model <- stepAIC(lm_full_model, direction = "backward", trace = 1)
+# summary(best_model)
+
+# best_model_only_best <- stepAIC(lm_full_model, direction = "backward", trace = 0)
+# summary(best_model_only_best)
+# ```
+```
+
+
+### Full model of best model example 
+
+```{r linear-regression-full_model-best-fit}
+# ```{r linear-regression-full_model-best-fit}
+# m_best_full_model <- linear_reg() %>% 
+#  set_engine("lm") %>% 
+#  fit(score ~  ethnicity + gender + cls_perc_eval + cls_credits + bty_avg, data = evals) %>% 
+# tidy()
+# view(m_best_full_model)
+
+# library(tidymodels)
+# library(broom)
+
+# R_m_best_full_model <- linear_reg() %>% 
+#  set_engine("lm") %>% 
+#  fit(score ~ ethnicity + gender + cls_perc_eval + cls_credits + bty_avg, data = evals)
+
+# broom::glance(R_m_best_full_model$fit)
+
+# contrasts(evals$gender)
+# contrasts(evals$ethnicity)
+# contrasts(evals$cls_credits)
+# ``` 
+```
+
+
+## Emojis 
+
+### Emojis 
+
+```{r emojis}
+# ```{r emojis}
+# install.packages("emoji")
+# library(emojifont)
+# search_emoji('smile')
+# cat("Text to be displayed", emoji("smiley_cat"))
+# ```
+```
 
